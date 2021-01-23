@@ -1,0 +1,48 @@
+class Ball {
+    constructor(id, x, y, r, bgcolor, game) {
+        this.id = id;
+        this.x = x;
+        this.y = y;
+        this.r = r;
+        this.vx = 0;
+        this.vy = 0;
+        this.v = 5;
+        this.bgcolor = bgcolor;
+        this.game = game;
+    }
+
+    initialize() {
+        this.vx = Math.random() > 0.5 ? 1 : -1;
+        this.vy = Math.random() > 0.5 ? 1 : -1;
+    }
+
+    draw() {
+        this.game.ctx.beginPath();
+        this.game.ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
+        this.game.ctx.closePath();
+
+        this.game.ctx.fillStyle = this.bgcolor;
+        this.game.ctx.fill();
+        //this.game.ctx.stroke();
+    }
+
+    move() {
+        // game collisions
+        if (this.x + this.r >= this.game.metrics.width) this.vx *= -1;
+        if (this.x <= this.game.metrics.left) this.vx *= -1;
+        if (this.y + this.r >= this.game.metrics.height + this.game.metrics.top) this.vy *= -1;
+        if (this.y <= this.game.metrics.top) this.vy *= -1;
+
+        // player collisions
+        if (this.y + this.r >= this.game.player.y && this.x >= this.game.player.x && this.x + this.r <= this.game.player.x + this.game.player.w) this.vy *= -1;
+
+        // bricks collisions
+        this.x += this.vx;
+        this.y += this.vy;
+    }
+
+    update() {
+        this.draw();
+        this.move();
+    }
+}

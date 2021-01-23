@@ -6,7 +6,7 @@ class Ball {
         this.r = r;
         this.vx = 0;
         this.vy = 0;
-        this.v = 5;
+        this.v = 3;
         this.bgcolor = bgcolor;
         this.game = game;
     }
@@ -34,11 +34,24 @@ class Ball {
         if (this.y <= this.game.metrics.top) this.vy *= -1;
 
         // player collisions
+        // V
         if (this.y + this.r >= this.game.player.y && this.x >= this.game.player.x && this.x + this.r <= this.game.player.x + this.game.player.w) this.vy *= -1;
-
+        /*  else
+              //H
+              if (this.x + this.r >= this.game.player.x && this.y + this.r >= this.game.player.y) this.vx *= -1;
+              else if (this.x <= this.game.player.x + this.game.player.w && this.y + this.r >= this.game.player.y) this.vx *= -1;
+  */
         // bricks collisions
-        this.x += this.vx;
-        this.y += this.vy;
+        this.game.bricks.forEach(brick => {
+            if ((this.y <= brick.y + brick.h + 10 && this.x >= brick.x && this.x + this.r <= brick.x + brick.w) ||
+                (this.y + this.h >= brick.y + 10 && this.x >= brick.x && this.x + this.r <= brick.x + brick.w)) {
+                this.vy *= -1;
+                brick.collide();
+            }
+        });
+
+        this.x += this.vx * this.v;
+        this.y += this.vy * this.v;
     }
 
     update() {

@@ -29,23 +29,43 @@ class Ball {
     move() {
         // game collisions
         if (this.x + this.r >= this.game.metrics.width) this.vx *= -1;
-        if (this.x <= this.game.metrics.left) this.vx *= -1;
+        if (this.x <= this.r) this.vx *= -1;
         if (this.y + this.r >= this.game.metrics.height + this.game.metrics.top) this.vy *= -1;
         if (this.y <= this.game.metrics.top) this.vy *= -1;
 
         // player collisions
         // V
-        if (this.y + this.r >= this.game.player.y && this.x >= this.game.player.x && this.x + this.r <= this.game.player.x + this.game.player.w) this.vy *= -1;
-        /*  else
-              //H
-              if (this.x + this.r >= this.game.player.x && this.y + this.r >= this.game.player.y) this.vx *= -1;
-              else if (this.x <= this.game.player.x + this.game.player.w && this.y + this.r >= this.game.player.y) this.vx *= -1;
-  */
+        if (this.x + this.r > this.game.player.x &&
+            this.x < this.game.player.x + this.game.player.w &&
+            this.y + this.r + (this.vy * this.v) > this.game.player.y &&
+            this.y + (this.vy * this.v) < this.game.player.y + this.game.player.h) {
+            this.vy *= -1;
+        }
+        //H
+        if (this.x + this.r + (this.vx * this.v) > this.game.player.x &&
+            this.x + (this.vx * this.v) < this.game.player.x + this.game.player.w &&
+            this.y + this.r > this.game.player.y &&
+            this.y < this.game.player.y + this.game.player.h) {
+            this.vx *= -1;
+        }
+
         // bricks collisions
         this.game.bricks.forEach(brick => {
-            if ((this.y <= brick.y + brick.h + 10 && this.x >= brick.x && this.x + this.r <= brick.x + brick.w) ||
-                (this.y + this.h >= brick.y + 10 && this.x >= brick.x && this.x + this.r <= brick.x + brick.w)) {
+            //V
+            if (this.x + this.r > brick.x &&
+                this.x < brick.x + brick.w &&
+                this.y + this.r + (this.vy * this.v) > brick.y &&
+                this.y + (this.vy * this.v) < brick.y + brick.h) {
                 this.vy *= -1;
+                brick.collide();
+            }
+
+            //H
+            if (this.x + this.r + (this.vx * this.v) > brick.x &&
+                this.x + (this.vx * this.v) < brick.x + brick.w &&
+                this.y + this.r > brick.y &&
+                this.y < brick.y + brick.h) {
+                this.vx *= -1;
                 brick.collide();
             }
         });

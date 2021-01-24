@@ -1,6 +1,6 @@
 class Game {
-    constructor(canvasElement) {
-        this.canvasElement = canvasElement;
+    constructor() {
+        this.canvasElement = this.createCanvasElement();
         this.ctx = null;
         this.metrics = null;
         this.player = null;
@@ -21,15 +21,25 @@ class Game {
             this.player.initialize();
 
             for (let index1 = 0; index1 < Math.floor((this.metrics.height * 0.5) / 20); index1++) {
-
-                for (let index = 0; index < Math.floor(this.metrics.width / 80); index++) {
-                    this.bricks.push(new Brick(index, (index * 80), (index1 * 20) + 10, 80, 20, TextureManager.BRICK_TEXTURE_SETS.blue.normal, this));
+                for (let index = 0; index < Math.floor(this.metrics.width / 90); index++) {
+                    this.bricks.push(new Brick(index, (index * 80) + 40, (index1 * 20) + 40, 80, 20, TextureManager.BRICK_TEXTURE_SETS.purple.normal, this));
                     this.bricks.forEach(brick => brick.initialize());
                 }
             }
 
             setInterval(() => this.update(), 10);
         });
+    }
+
+    createCanvasElement() {
+        let canvas = document.createElement("canvas");
+        canvas.id = "canvas";
+        canvas.width = window.innerWidth * 0.999;
+        canvas.height = window.innerHeight;
+        document.body.appendChild(canvas);
+
+        return document.getElementById("canvas");
+
     }
 
 

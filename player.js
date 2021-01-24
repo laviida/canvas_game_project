@@ -41,7 +41,7 @@ class Player {
 
     move() {
         this.moves[0] ? this.vx = -this.v : this.moves[1] ? this.vx = this.v : this.vx = 0;
-        if ((this.x + this.w >= this.game.metrics.width && !this.moves[0]) || (this.x <= this.game.metrics.left && !this.moves[1]))
+        if ((this.x + this.w >= this.game.metrics.width && !this.moves[0]) || (this.x <= 0 && !this.moves[1]))
             this.vx = 0;
 
         this.x += this.vx;

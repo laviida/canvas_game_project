@@ -22,7 +22,7 @@ class Game {
             this.balls.forEach(ball => ball.initialize());
             this.player.initialize();
 
-            this.createMap(MapManager.MAPS.alien);
+            this.createMap(MapManager.MAPS.space);
 
             setInterval(() => this.update(), 10);
         });

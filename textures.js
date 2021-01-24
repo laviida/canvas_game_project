@@ -10,12 +10,13 @@ class TextureManager {
         green: { normal: "15-Breakout-Tiles", cracked: "16-Breakout-Tiles" },
         "dark-blue": { normal: "17-Breakout-Tiles", cracked: "18-Breakout-Tiles" },
         brown: { normal: "19-Breakout-Tiles", cracked: "20-Breakout-Tiles" },
+        black: { normal: "21-Breakout-Tiles", cracked: "22-Breakout-Tiles" },
     }
 
     static BRICK_TEXTURES_NORMAL = ["01-Breakout-Tiles", "03-Breakout-Tiles", "05-Breakout-Tiles", "07-Breakout-Tiles", "09-Breakout-Tiles",
-        "11-Breakout-Tiles", "13-Breakout-Tiles", "15-Breakout-Tiles", "17-Breakout-Tiles", "19-Breakout-Tiles"]
+        "11-Breakout-Tiles", "13-Breakout-Tiles", "15-Breakout-Tiles", "17-Breakout-Tiles", "19-Breakout-Tiles", "21-Breakout-Tiles"]
     static BRICK_TEXTURES_CRACKED = ["02-Breakout-Tiles", "04-Breakout-Tiles", "06-Breakout-Tiles", "08-Breakout-Tiles", "10-Breakout-Tiles",
-        "12-Breakout-Tiles", "14-Breakout-Tiles", "16-Breakout-Tiles", "18-Breakout-Tiles", "20-Breakout-Tiles"]
+        "12-Breakout-Tiles", "14-Breakout-Tiles", "16-Breakout-Tiles", "18-Breakout-Tiles", "20-Breakout-Tiles", "22-Breakout-Tiles"]
 
     static BRICK_STATE = { NORMAL: "NORMAL", CRACKED: "CRACKED" }
 
@@ -36,7 +37,7 @@ class TextureManager {
     static loadTextures() {
         var promises = []
         return new Promise(res => {
-            for (let index = 1; index < 62; index++) {
+            for (let index = 1; index < 22; index++) {
                 promises.push(new Promise(resolve => {
                     let texture = new Image();
                     texture.src = `./img/${index < 10 ? ("0" + index) : index}-Breakout-Tiles.png`;

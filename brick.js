@@ -1,5 +1,6 @@
 class Brick {
-    constructor(id, x, y, w, h, texture, game) {
+
+    constructor(id, x, y, w, h, die = false, texture, game) {
         this.id = id;
         this.x = x;
         this.y = y;
@@ -7,7 +8,7 @@ class Brick {
         this.h = h;
         this.game = game;
         this.texture = TextureManager.getTexture(texture, this.game.textures);
-        this.die = false;
+        this.die = die;
     }
 
     initialize() {

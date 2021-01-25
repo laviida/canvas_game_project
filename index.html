@@ -24,11 +24,113 @@
         canvas {
             border: 1px solid black;
         }
+
+        #pause {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: block;
+            width: 50px;
+            height: 50px;
+            filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg) brightness(96%) contrast(101%);
+            cursor: pointer;
+            background: url('./powers/pause.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+
+        #pause:hover {
+            filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg) brightness(96%) contrast(101%);
+            background: url('./powers/pause_filled.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+
+
+        #settings {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: block;
+            width: 50px;
+            height: 50px;
+            filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg) brightness(96%) contrast(101%);
+            cursor: pointer;
+            background: url('./powers/settings.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            transition: all 2s ease;
+        }
+
+        .settings_animation {
+            transform: rotate(360deg);
+        }
+
+        #menu {
+            position: absolute;
+            top: 80px;
+            right: 19px;
+            display: block;
+            opacity: 0;
+            width: 50px;
+            height: 0;
+            border-left: 2px solid #df6500;
+            border-right: 2px solid #df6500;
+            border-bottom: 2px solid #df6500;
+            border-bottom-left-radius: 300% 80%;
+            border-bottom-right-radius: 300% 80%;
+            transition: height .5s linear;
+        }
+
+        .menu_animation {
+            opacity: 1 !important;
+            height: 200px !important;
+        }
+
+        .menu_item {
+            position: absolute;
+            right: 7px;
+            display: block;
+            width: 35px;
+            height: 35px;
+        }
+
+        #camera {
+            display: none;
+            top: 10px;
+            filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg) brightness(96%) contrast(101%);
+            cursor: pointer;
+            background: url('./powers/camera.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+
+        #user {
+            display: none;
+            top: 60px;
+            filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg) brightness(96%) contrast(101%);
+            cursor: pointer;
+            background: url('./powers/user.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
     </style>
 
 </head>
 
 <body>
+    <div id="pause" title="Play / Pause game"></div>
+    <div id="settings" title="Settings"></div>
+    <div id="menu">
+        <div id="camera" title="Take a picture of canvas" class="menu_item"></div>
+        <div id="user" title="User settings" class="menu_item"></div>
+    </div>
+
 </body>
 
 </html>

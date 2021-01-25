@@ -62,4 +62,11 @@ class Player {
         if (e.keyCode == 37 || e.keyCode == 39) this.moves = [false, false];
     }
 
+    start() {
+        this.v = 5;
+    }
+
+    pause() {
+        this.v = 0;
+    }
 }

@@ -38,7 +38,8 @@ class MapManager {
             "--ss--ss--",
             "--ss--ss--",
             "--ss--ss--"
-        ], ball: [
+        ],
+        ball: [
             "ssssss-ssssss",
             "sssss---sssss",
             "ssss-s-s-ssss",
@@ -64,7 +65,8 @@ class MapManager {
             "ssss-s-s-ssss",
             "sssss---sssss",
             "ssssss-ssssss"
-        ], mario: [
+        ],
+        mario: [
             "sssrrrrrssss",
             "ssrrrrrrrrrs",
             "ssbbbookosss",
@@ -89,7 +91,8 @@ class MapManager {
             "ssbbssssbbss",
             "sbbbssssbbbs",
             "sbbbssssbbbs"
-        ], emoji: [
+        ],
+        emoji: [
             "ssssskkkkksssss",
             "ssskkyyyyykksss",
             "sskyyyyyyyyykss",
@@ -109,7 +112,8 @@ class MapManager {
             "sskyyyyyyyyykss",
             "ssskkyyyyykksss",
             "ssssskkkkksssss"
-        ], space: [
+        ],
+        space: [
             "sssosssssosss",
             "sssosssssosss",
             "ssssosssossss",
@@ -128,7 +132,9 @@ class MapManager {
             "ssssoosoossss"
         ]
     }
-    constructor(game) { this.game = game; }
+    constructor(game) {
+        this.game = game;
+    }
 
     drawMap(map) {
 
@@ -152,11 +158,11 @@ class MapManager {
                 map[index1][index] == this.MAP_SPACE && map[index1].split(this.MAP_SPACE).length - 1 != map[index1].length ? die = true : die = false;
                 map[index1][index] == this.MAP_BRICK_RED ? texture = TextureManager.BRICK_TEXTURE_SETS.red.normal :
                     map[index1][index] == this.MAP_BRICK_BROWN ? texture = TextureManager.BRICK_TEXTURE_SETS.brown.normal :
-                        map[index1][index] == this.MAP_BRICK_BLUE ? texture = TextureManager.BRICK_TEXTURE_SETS.blue.normal :
-                            map[index1][index] == this.MAP_BRICK_YELLOW ? texture = TextureManager.BRICK_TEXTURE_SETS.yellow.normal :
-                                map[index1][index] == this.MAP_BRICK_ORANGE ? texture = TextureManager.BRICK_TEXTURE_SETS.orange.normal :
-                                    map[index1][index] == this.MAP_BRICK_BLACK ? texture = TextureManager.BRICK_TEXTURE_SETS.black.normal :
-                                        texture = TextureManager.BRICK_TEXTURE_SETS.purple.normal;
+                    map[index1][index] == this.MAP_BRICK_BLUE ? texture = TextureManager.BRICK_TEXTURE_SETS.blue.normal :
+                    map[index1][index] == this.MAP_BRICK_YELLOW ? texture = TextureManager.BRICK_TEXTURE_SETS.yellow.normal :
+                    map[index1][index] == this.MAP_BRICK_ORANGE ? texture = TextureManager.BRICK_TEXTURE_SETS.orange.normal :
+                    map[index1][index] == this.MAP_BRICK_BLACK ? texture = TextureManager.BRICK_TEXTURE_SETS.black.normal :
+                    texture = TextureManager.BRICK_TEXTURE_SETS.purple.normal;
 
                 this.game.bricks.push(new Brick(index, (startX + (brick_width * index)) + col_gap * index, startY + (index1 * brick_height) + row_gap, brick_width, brick_height, die, texture, this.game));
                 this.game.bricks.forEach(brick => brick.initialize());

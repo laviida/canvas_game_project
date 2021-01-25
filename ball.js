@@ -6,14 +6,14 @@ class Ball {
         this.r = r;
         this.vx = 0;
         this.vy = 0;
-        this.v = 0;
+        this.v = 3;
         this.bgcolor = bgcolor;
         this.game = game;
     }
 
     initialize() {
         this.vx = Math.random() > 0.5 ? 1 : -1;
-        this.vy = Math.random() > 0.5 ? 1 : -1;
+        this.vy = -1;
     }
 
     draw() {
@@ -77,5 +77,13 @@ class Ball {
     update() {
         this.draw();
         this.move();
+    }
+
+    start() {
+        this.v = 3;
+    }
+
+    pause() {
+        this.v = 0;
     }
 }

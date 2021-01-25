@@ -16,8 +16,6 @@ class Player {
     initialize() {
         window.addEventListener("keydown", (e) => this.detectMove(e));
         window.addEventListener("keyup", (e) => this.removeMove(e));
-
-        this.draw();
     }
 
     draw() {

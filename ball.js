@@ -6,7 +6,7 @@ class Ball {
         this.r = r;
         this.vx = 0;
         this.vy = 0;
-        this.v = 3;
+        this.v = 0;
         this.bgcolor = bgcolor;
         this.game = game;
     }

@@ -1,4 +1,9 @@
 window.addEventListener("load", () => {
-    var game = new Game();
-    game.initialize();
+    Splitting();
+    setTimeout(() => {
+        var game = new Game();
+        game.initialize();
+        document.getElementById("loader").remove();
+    }, 5000);
+
 });

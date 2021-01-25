@@ -3,8 +3,16 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Document</title>
+
+    <!-- BOOTSTRAP 4.6.0 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.js"></script>
+    <script src="https://unpkg.com/splitting/dist/splitting.js"></script>
+
     <script src="game.js"></script>
     <script src="brick.js"></script>
     <script src="player.js"></script>
@@ -12,125 +20,116 @@
     <script src="textures.js"></script>
     <script src="map.js"></script>
     <script src="main.js"></script>
-    <style>
-        body {
-            margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        canvas {
-            border: 1px solid black;
-        }
-
-        #pause {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            display: block;
-            width: 50px;
-            height: 50px;
-            filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg) brightness(96%) contrast(101%);
-            cursor: pointer;
-            background: url('./powers/pause.png');
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: cover;
-        }
-
-        #pause:hover {
-            filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg) brightness(96%) contrast(101%);
-            background: url('./powers/pause_filled.png');
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: cover;
-        }
-
-
-        #settings {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            display: block;
-            width: 50px;
-            height: 50px;
-            filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg) brightness(96%) contrast(101%);
-            cursor: pointer;
-            background: url('./powers/settings.png');
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: cover;
-            transition: all 2s ease;
-        }
-
-        .settings_animation {
-            transform: rotate(360deg);
-        }
-
-        #menu {
-            position: absolute;
-            top: 80px;
-            right: 19px;
-            display: block;
-            opacity: 0;
-            width: 50px;
-            height: 0;
-            border-left: 2px solid #df6500;
-            border-right: 2px solid #df6500;
-            border-bottom: 2px solid #df6500;
-            border-bottom-left-radius: 300% 80%;
-            border-bottom-right-radius: 300% 80%;
-            transition: height .5s linear;
-        }
-
-        .menu_animation {
-            opacity: 1 !important;
-            height: 200px !important;
-        }
-
-        .menu_item {
-            position: absolute;
-            right: 7px;
-            display: block;
-            width: 35px;
-            height: 35px;
-        }
-
-        #camera {
-            display: none;
-            top: 10px;
-            filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg) brightness(96%) contrast(101%);
-            cursor: pointer;
-            background: url('./powers/camera.png');
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: cover;
-        }
-
-        #user {
-            display: none;
-            top: 60px;
-            filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg) brightness(96%) contrast(101%);
-            cursor: pointer;
-            background: url('./powers/user.png');
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: cover;
-        }
-    </style>
-
+    <link rel="stylesheet" href="./css/index.css">
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P|Permanent+Marker" rel="stylesheet">
 </head>
 
 <body>
-    <div id="pause" title="Play / Pause game"></div>
-    <div id="settings" title="Settings"></div>
-    <div id="menu">
-        <div id="camera" title="Take a picture of canvas" class="menu_item"></div>
-        <div id="user" title="User settings" class="menu_item"></div>
+    <div id="game">
+        <div id="pause" title="Play / Pause game"></div>
+        <div id="settings" title="Settings"></div>
+        <div id="menu">
+            <div id="camera" title="Take a picture of canvas" class="menu_item"></div>
+            <div id="user" title="User settings" class="menu_item"></div>
+        </div>
+        <!-- The Modal -->
+        <div></div>
+        <div class="modal fade mw-100 w-100 mx-auto" id="myModal">
+            <div class="modal-dialog modal-dialog-centered mw-100 w-50">
+                <div class="modal-content" style="background-color: rgba(0, 0, 0, 0);">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                <div class="title" data-splitting="lines" style="background-color: rgba(0, 0, 0, 0);">
+                                    BRICK<br />
+                                    BREAKER
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row ">
+                            <div class="col">
+                                <div class="buttons grey-with-red">
+                                    <a class="purple-with-blue one-line">Push start button</a>
+                                    <a class="one-line">One Player</a>
+                                    <a class="one-line">or</a>
+                                    <a class="one-line">Player 1 vs Player 2</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
 
+
+    <div id="loader" class="preloader">
+        <div class="preloader__ring">
+            <div class="preloader__sector">L</div>
+            <div class="preloader__sector">o</div>
+            <div class="preloader__sector">a</div>
+            <div class="preloader__sector">d</div>
+            <div class="preloader__sector">i</div>
+            <div class="preloader__sector">n</div>
+            <div class="preloader__sector">g</div>
+            <div class="preloader__sector">.</div>
+            <div class="preloader__sector">.</div>
+            <div class="preloader__sector">.</div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+        </div>
+        <div class="preloader__ring">
+            <div class="preloader__sector">L</div>
+            <div class="preloader__sector">o</div>
+            <div class="preloader__sector">a</div>
+            <div class="preloader__sector">d</div>
+            <div class="preloader__sector">i</div>
+            <div class="preloader__sector">n</div>
+            <div class="preloader__sector">g</div>
+            <div class="preloader__sector">.</div>
+            <div class="preloader__sector">.</div>
+            <div class="preloader__sector">.</div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+            <div class="preloader__sector"></div>
+        </div>
+    </div>
 </body>
 
 </html>

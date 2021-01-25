@@ -18,11 +18,14 @@ class Game {
         this.settings_opened = false;
         this.menu_element = document.getElementById("menu");
         this.camera_element = document.getElementById("camera");
+        this.user_element = document.getElementById("user");
+
 
     }
 
     initialize() {
         TextureManager.loadTextures().then(textures => {
+            document.getElementById("game").style.display = "block";
             this.textures = textures;
             this.ctx = this.canvasElement.getContext("2d");
             this.metrics = this.canvasElement.getBoundingClientRect();
@@ -32,7 +35,7 @@ class Game {
             this.balls.forEach(ball => ball.initialize());
             this.player.initialize();
 
-            this.createMap(MapManager.MAPS.space);
+
 
             this.pause_element.addEventListener("click", (e) => this.pause(e));
             window.addEventListener("keyup", (e) => this.pause(e));
@@ -48,11 +51,20 @@ class Game {
                 link.setAttribute('download', 'canvas.png');
                 link.setAttribute('href', this.canvasElement.toDataURL("image/png").replace("image/png", "image/octet-stream"));
                 link.click();
-            })
+            });
 
-
-            setInterval(() => this.update(), 10);
+            this.user_element.addEventListener("click", () => this.showStartForm());
+            this.showStartForm();
         });
+    }
+
+    start() {
+        this.createMap(MapManager.MAPS.space);
+        setInterval(() => this.update(), 10);
+    }
+
+    showStartForm() {
+        $("#myModal").modal({ backdrop: "static" });
     }
 
     createMap(map) {
@@ -64,7 +76,7 @@ class Game {
         canvas.id = "canvas";
         canvas.width = this.window_metrics.width * 0.999;
         canvas.height = this.window_metrics.height;
-        document.body.appendChild(canvas);
+        document.getElementById("game").appendChild(canvas);
 
         return document.getElementById("canvas");
 
@@ -89,10 +101,6 @@ class Game {
 
     clear() {
         this.ctx.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
-    }
-
-    open() {
-
     }
 
     pause(e) {

@@ -19,8 +19,17 @@ class Game {
         this.menu_element = document.getElementById("menu");
         this.camera_element = document.getElementById("camera");
         this.user_element = document.getElementById("user");
-
-
+        this.placeholder_start = document.getElementById("placeholder_start");
+        this.form_account = document.getElementById("form_account");
+        this.save_settings = document.getElementById("save_settings");
+        this.reset_settings = document.getElementById("reset_settings");
+        this.initialSettingsBall = {
+            bgcolor: "#fff",
+            brdcolor: "#ff00ff"
+        };
+        this.brdColorPickerBall = null;
+        this.bgColorPickerBall = null;
+        this.placeholder = false;
     }
 
     initialize() {
@@ -30,12 +39,12 @@ class Game {
             this.ctx = this.canvasElement.getContext("2d");
             this.metrics = this.canvasElement.getBoundingClientRect();
             this.paintBackground("#000");
-            this.player = new Player((this.metrics.width / 2) - 50, this.metrics.height * 0.9, this.window_metrics.width * 0.15, this.window_metrics.height * 0.03, 5, "#fff", "#ff00ff", this);
-            this.balls.push(new Ball(1, (this.metrics.width / 2) - 50, this.metrics.height * 0.7, this.window_metrics.width * 0.009, "#fff", this));
+            this.player = new Player((this.metrics.width / 2) - (this.window_metrics.width * 0.15) / 2, this.metrics.height * 0.9, this.window_metrics.width * 0.15, this.window_metrics.height * 0.03, 5, null, null, this);
+            this.balls.push(new Ball(1, (this.metrics.width / 2) - (this.window_metrics.width * 0.009) / 2, this.player.y - this.window_metrics.width * 0.009, this.window_metrics.width * 0.009, this.initialSettingsBall.bgcolor, this));
             this.balls.forEach(ball => ball.initialize());
             this.player.initialize();
 
-
+            this.ballsColorPickersListeners();
 
             this.pause_element.addEventListener("click", (e) => this.pause(e));
             window.addEventListener("keyup", (e) => this.pause(e));
@@ -53,18 +62,73 @@ class Game {
                 link.click();
             });
 
-            this.user_element.addEventListener("click", () => this.showStartForm());
+            this.user_element.addEventListener("click", () => this.showSettings());
+            document.getElementById("start_game").addEventListener("click", () => this.start());
+            this.save_settings.addEventListener("click", () => this.saveSettings());
+            this.reset_settings.addEventListener("click", () => this.resetSettings());
             this.showStartForm();
         });
     }
 
     start() {
+        $('#myModal').modal('hide');
+
+        this.showPlaceholderStart();
         this.createMap(MapManager.MAPS.space);
         setInterval(() => this.update(), 10);
     }
 
+    resetSettings() {
+        this.player.bgColorPicker.reset();
+        this.player.brdColorPicker.reset()
+
+        this.bgColorPickerBall.reset();
+        this.brdColorPickerBall.reset();
+    }
+
+    saveSettings() {
+        this.hideSettings();
+    }
+
     showStartForm() {
-        $("#myModal").modal({ backdrop: "static" });
+        $("#myModal").modal({
+            backdrop: "static"
+        });
+    }
+
+    showSettings() {
+        if (!this.paused)
+            this.pause({
+                type: "click"
+            });
+
+        document.getElementsByClassName("accountFormWrapper")[0].style.display = "block";
+        this.form_account.style.display = "block";
+    }
+
+    hideSettings() {
+        document.getElementsByClassName("accountFormWrapper")[0].style.display = "none";
+        this.form_account.style.display = "none";
+    }
+
+    showPlaceholderStart() {
+        this.placeholder_start = document.getElementById("placeholder_start");
+        document.getElementById("placeholder_start").style.display = "block";
+        window.addEventListener("keypress", (e) => {
+            if (e.keyCode == 32 && !this.placeholder) {
+                this.placeholder = true;
+                this.hidePlaceholderStart();
+                document.getElementById("pause").style.display = "block";
+                document.getElementById("menu").style.display = "block";
+                document.getElementById("settings").style.display = "block";
+                this.player.start();
+                this.balls.forEach(ball => ball.start());
+            };
+        });
+    }
+
+    hidePlaceholderStart() {
+        this.placeholder_start.style.display = "none";
     }
 
     createMap(map) {
@@ -79,7 +143,6 @@ class Game {
         document.getElementById("game").appendChild(canvas);
 
         return document.getElementById("canvas");
-
     }
 
 
@@ -109,15 +172,45 @@ class Game {
             if (this.paused) {
                 this.player.pause();
                 this.balls.forEach(ball => ball.pause());
-                this.pause_element.style.background = "url('./powers/pause_filled.png')";
+                this.pause_element.style.background = "url('../img/form_icons/pause_filled.png')";
             } else {
                 this.player.start();
                 this.balls.forEach(ball => ball.start());
-                this.pause_element.style.background = "url('./powers/pause.png')";
+                this.pause_element.style.background = "url('../img/form_icons/pause.png')";
             }
             this.pause_element.style.backgroundRepeat = "no-repeat";
             this.pause_element.style.backgroundPosition = "center";
             this.pause_element.style.backgroundSize = "cover";
         }
     }
+
+    ballsColorPickersListeners() {
+
+
+
+        this.bgColorPickerBall = new iro.ColorPicker(".colorPicker3", {
+            width: this.window_metrics.width * 0.05,
+            color: this.initialSettingsBall.bgcolor,
+            borderWidth: 1,
+            borderColor: "#fff",
+            layoutDirection: "horizontal"
+        });
+
+        this.bgColorPickerBall.on(["color:init", "color:change"], (color) => {
+            this.balls.forEach(ball => ball.bgcolor = color.hexString);
+        });
+
+        this.brdColorPickerBall = new iro.ColorPicker(".colorPicker4", {
+            width: this.window_metrics.width * 0.05,
+            color: this.initialSettingsBall.brdcolor,
+            borderWidth: 1,
+            borderColor: "#fff",
+            layoutDirection: "horizontal"
+        });
+
+        this.brdColorPickerBall.on(["color:init", "color:change"], (color) => {
+            this.balls.forEach(ball => ball.brdcolor = color.hexString);
+        });
+    }
+
 }

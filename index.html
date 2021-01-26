@@ -13,6 +13,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.js"></script>
     <script src="https://unpkg.com/splitting/dist/splitting.js"></script>
 
+    <!-- COLOR PICKER -->
+    <script src="https://cdn.jsdelivr.net/npm/@jaames/iro/dist/iro.min.js"></script>
+
     <script src="game.js"></script>
     <script src="brick.js"></script>
     <script src="player.js"></script>
@@ -22,6 +25,7 @@
     <script src="main.js"></script>
     <link rel="stylesheet" href="./css/index.css">
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P|Permanent+Marker" rel="stylesheet">
+
 </head>
 
 <body>
@@ -49,7 +53,7 @@
                         <div class="row ">
                             <div class="col">
                                 <div class="buttons grey-with-red">
-                                    <a class="purple-with-blue one-line">Push start button</a>
+                                    <a class="purple-with-blue one-line" id="start_game">Start Game</a>
                                     <a class="one-line">One Player</a>
                                     <a class="one-line">or</a>
                                     <a class="one-line">Player 1 vs Player 2</a>
@@ -62,7 +66,52 @@
             </div>
         </div>
     </div>
+    <h2 id="placeholder_start" class=" grey-with-red">press space to start</h2>
 
+    <div class="accountFormWrapper">
+        <div id="form_account">
+            <div class="container">
+                <div class="row">
+                    <div class="col purple-with-blue text-center underline one-line">settings</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col purple-with-blue one-line align-self-center">user background color</div>
+                    <div class="col pr-5">
+                        <div class="colorPicker"></div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col purple-with-blue one-line align-self-center">user border color</div>
+                    <div class="col pr-5">
+                        <div class="colorPicker2"></div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col purple-with-blue one-line align-self-center">ball background color</div>
+                    <div class="col pr-5">
+                        <div class="colorPicker3"></div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col purple-with-blue one-line align-self-center">ball border color</div>
+                    <div class="col pr-5">
+                        <div class="colorPicker4"></div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col d-flex justify-content-end">
+                        <button id="save_settings" class="grey-with-red one-line">save</button>
+                    </div>
+                    <div class="col d-flex justify-content-start">
+                        <button id="reset_settings" class="grey-with-red one-line">reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div id="loader" class="preloader">
         <div class="preloader__ring">

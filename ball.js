@@ -8,6 +8,7 @@ class Ball {
         this.vy = 0;
         this.v = 0;
         this.bgcolor = bgcolor;
+        this.brdcolor = "#fff";
         this.game = game;
     }
 
@@ -23,7 +24,8 @@ class Ball {
 
         this.game.ctx.fillStyle = this.bgcolor;
         this.game.ctx.fill();
-        //this.game.ctx.stroke();
+        this.game.ctx.strokeStyle = this.brdcolor;
+        this.game.ctx.stroke();
     }
 
     move() {
@@ -86,4 +88,5 @@ class Ball {
     pause() {
         this.v = 0;
     }
+
 }

@@ -1,21 +1,30 @@
 class Player {
     constructor(x, y, w, h, r, bgcolor, brdcolor, game) {
+        this.initialSettings = {
+            bgcolor: "#fff",
+            brdcolor: "#ff00ff"
+        }
         this.x = x;
         this.y = y;
         this.w = w;
         this.h = h;
         this.r = r;
         this.vx = 0;
-        this.v = 5;
-        this.bgcolor = bgcolor;
-        this.brdcolor = brdcolor;
+        this.v = 0;
+        this.bgcolor = null == bgcolor ? this.initialSettings.bgcolor : bgcolor;
+        this.brdcolor = null == brdcolor ? this.initialSettings.brdcolor : brdcolor;;
         this.game = game;
         this.moves = [false, false]; // left - right
+        this.bgColorPicker = null;
+        this.brdColorPicker = null;
+
+
     }
 
     initialize() {
         window.addEventListener("keydown", (e) => this.detectMove(e));
         window.addEventListener("keyup", (e) => this.removeMove(e));
+        this.settingsListeners();
     }
 
     draw() {
@@ -66,5 +75,27 @@ class Player {
 
     pause() {
         this.v = 0;
+    }
+
+    settingsListeners() {
+        this.bgColorPicker = new iro.ColorPicker(".colorPicker", {
+            width: this.game.window_metrics.width * 0.05,
+            color: this.initialSettings.bgcolor,
+            borderWidth: 1,
+            borderColor: "#fff",
+            layoutDirection: "horizontal"
+        });
+
+        this.bgColorPicker.on(["color:init", "color:change"], (color) => this.bgcolor = color.hexString);
+
+        this.brdColorPicker = new iro.ColorPicker(".colorPicker2", {
+            width: this.game.window_metrics.width * 0.05,
+            color: this.initialSettings.brdcolor,
+            borderWidth: 1,
+            borderColor: "#fff",
+            layoutDirection: "horizontal"
+        });
+
+        this.brdColorPicker.on(["color:init", "color:change"], (color) => this.brdcolor = color.hexString);
     }
 }

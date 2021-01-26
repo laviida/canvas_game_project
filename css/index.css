@@ -14,9 +14,30 @@ body {
   height: 100%;
 }
 
+.modal::-webkit-scrollbar,
+.modal-dialog ::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.modal,
+.modal-dialog {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+.modal,
+.modal-dialog {
+  overflow: hidden;
+}
+
 a {
   text-decoration: none;
   color: inherit;
+  cursor: pointer;
+
 }
 
 canvas {
@@ -30,8 +51,7 @@ canvas {
   display: none;
   width: calc(100vh * 0.06);
   height: calc(100vh * 0.06);
-  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg)
-    brightness(96%) contrast(101%);
+  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg) brightness(96%) contrast(101%);
   cursor: pointer;
   background: url("../img/form_icons/pause.png");
   background-repeat: no-repeat;
@@ -40,8 +60,7 @@ canvas {
 }
 
 #pause:hover {
-  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg)
-    brightness(96%) contrast(101%);
+  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg) brightness(96%) contrast(101%);
   background: url("../img/form_icons/pause_filled.png");
   background-repeat: no-repeat;
   background-position: center;
@@ -55,8 +74,7 @@ canvas {
   display: none;
   width: calc(100vh * 0.06);
   height: calc(100vh * 0.06);
-  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg)
-    brightness(96%) contrast(101%);
+  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg) brightness(96%) contrast(101%);
   cursor: pointer;
   background: url("../img/form_icons/settings.png");
   background-repeat: no-repeat;
@@ -85,6 +103,66 @@ canvas {
   transition: height 0.5s linear;
 }
 
+#form_account {
+  position: absolute;
+  display: none;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 10%;
+  text-transform: uppercase;
+  font-family: "Press Start 2P", monospace;
+}
+
+.IroColorPicker {
+  text-align: right;
+}
+
+.accountFormWrapper {
+  position: absolute;
+  display: none;
+  background-color: black;
+  height: 100%;
+  width: 100%;
+}
+
+button.grey-with-red {
+  border: none;
+  text-align: center;
+  text-decoration: none;
+  background-color: rgba(0, 0, 0, 1);
+  text-transform: uppercase;
+}
+
+button.grey-with-red:hover {
+  color: rgb(147, 154, 255);
+  text-shadow: 2px 2px 0 rgb(47, 61, 255);
+}
+
+.underline {
+  text-decoration-color: #df6500;
+  text-decoration: underline;
+  margin-bottom: 20px;
+}
+
+#placeholder_start {
+  position: absolute;
+  display: none;
+  font-family: "Press Start 2P", monospace;
+  animation: placeholder 1s linear alternate infinite;
+}
+
+@keyframes placeholder {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(1.1);
+  }
+}
+
 .menu_animation {
   opacity: 1 !important;
   height: calc(100vh * 0.25) !important;
@@ -101,8 +179,7 @@ canvas {
 #camera {
   display: none;
   top: 10px;
-  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg)
-    brightness(96%) contrast(101%);
+  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg) brightness(96%) contrast(101%);
   cursor: pointer;
   background: url("../img/form_icons/camera.png");
   background-repeat: no-repeat;
@@ -113,25 +190,25 @@ canvas {
 #user {
   display: none;
   top: 60px;
-  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg)
-    brightness(96%) contrast(101%);
+  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg) brightness(96%) contrast(101%);
   cursor: pointer;
   background: url("../img/form_icons/user.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
 }
+
 .title {
   text-align: center;
   font-family: "Coda Caption", sans-serif;
   font-weight: 800;
-  font-size: calc(
-    20vw / var(--word-total)
-  ); /* Overriden below for fluid typography test */
+  font-size: calc(20vw / var(--word-total));
+  /* Overriden below for fluid typography test */
   line-height: 1;
   letter-spacing: -0.03em;
   transform: perspective(300px) scaleY(1.5) rotateX(-40deg);
-  transform-style: preserve-3d; /* Important for establishing a shared 3D space for all the layers */
+  transform-style: preserve-3d;
+  /* Important for establishing a shared 3D space for all the layers */
   --layer-depth: 0.32em;
 }
 
@@ -140,13 +217,11 @@ canvas {
   position: relative;
   display: inline-block;
   color: yellow;
-  font-size: calc(
-    ((var(--line-index) + 1) * 25%) + 50%
-  ); /* We skew font-sizes to avoid emphasize on the top, due to perspective rotation */
-  text-shadow: 0.06em 0 black, 0.06em 0.06em black, 0 0.06em black,
-    -0.06em 0.06em black, -0.06em 0 black, -0.06em -0.06em black,
-    0 -0.06em black, 0.06em -0.06em black;
-  transform-style: preserve-3d; /* Important as above, we need to make sure the pseudos share the same 3D space */
+  font-size: calc(((var(--line-index) + 1) * 25%) + 50%);
+  /* We skew font-sizes to avoid emphasize on the top, due to perspective rotation */
+  text-shadow: 0.06em 0 black, 0.06em 0.06em black, 0 0.06em black, -0.06em 0.06em black, -0.06em 0 black, -0.06em -0.06em black, 0 -0.06em black, 0.06em -0.06em black;
+  transform-style: preserve-3d;
+  /* Important as above, we need to make sure the pseudos share the same 3D space */
 }
 
 /* The back layers are two pseudos, we pull content through via Splitting.js! */
@@ -164,9 +239,7 @@ canvas {
 /* Red layer immediately behind the yellow, thinner stroke outline */
 .title .word::before {
   color: red;
-  text-shadow: 0.02em 0 black, 0.02em 0.02em black, 0 0.02em black,
-    -0.02em 0.02em black, -0.02em 0 black, -0.02em -0.02em black,
-    0 -0.02em black, 0.02em -0.02em black;
+  text-shadow: 0.02em 0 black, 0.02em 0.02em black, 0 0.02em black, -0.02em 0.02em black, -0.02em 0 black, -0.02em -0.02em black, 0 -0.02em black, 0.02em -0.02em black;
   transform: translateZ(calc(var(--layer-depth) * -0.5));
 }
 
@@ -186,10 +259,7 @@ canvas {
 
 @media screen and (min-width: 320px) {
   .title {
-    font-size: calc(
-      var(--min-font-size) * 1px + (var(--max-font-size) - var(--min-font-size)) *
-        ((100vw - 320px) / 680)
-    );
+    font-size: calc(var(--min-font-size) * 1px + (var(--max-font-size) - var(--min-font-size)) * ((100vw - 320px) / 680));
   }
 }
 
@@ -224,10 +294,12 @@ canvas {
   align-items: center;
   width: 5%;
 }
+
 .preloader,
 .preloader__ring {
   transform-style: preserve-3d;
 }
+
 .preloader__ring {
   animation-name: spin;
   animation-duration: 4s;
@@ -238,9 +310,11 @@ canvas {
   height: 3rem;
   width: 1.5rem;
 }
+
 .preloader__ring:nth-child(even) {
   animation-direction: reverse;
 }
+
 .preloader__sector {
   font-weight: 600;
   position: absolute;
@@ -250,104 +324,131 @@ canvas {
   text-transform: uppercase;
   transform: translateZ(7rem);
 }
+
 .preloader__sector,
 .preloader__sector:empty:before {
   display: inline-block;
   width: 100%;
   height: 100%;
 }
+
 .preloader__sector:empty:before {
-  background: linear-gradient(
-    transparent 45%,
-    currentColor 45% 55%,
-    transparent 55%
-  );
+  background: linear-gradient(transparent 45%, currentColor 45% 55%, transparent 55%);
   content: "";
 }
+
 .preloader__sector:nth-child(2) {
   transform: rotateY(12deg) translateZ(7rem);
 }
+
 .preloader__sector:nth-child(3) {
   transform: rotateY(24deg) translateZ(7rem);
 }
+
 .preloader__sector:nth-child(4) {
   transform: rotateY(36deg) translateZ(7rem);
 }
+
 .preloader__sector:nth-child(5) {
   transform: rotateY(48deg) translateZ(7rem);
 }
+
 .preloader__sector:nth-child(6) {
   transform: rotateY(60deg) translateZ(7rem);
 }
+
 .preloader__sector:nth-child(7) {
   transform: rotateY(72deg) translateZ(7rem);
 }
+
 .preloader__sector:nth-child(8) {
   transform: rotateY(84deg) translateZ(7rem);
 }
+
 .preloader__sector:nth-child(9) {
   transform: rotateY(96deg) translateZ(7rem);
 }
+
 .preloader__sector:nth-child(10) {
   transform: rotateY(108deg) translateZ(7rem);
 }
+
 .preloader__sector:nth-child(11) {
   transform: rotateY(120deg) translateZ(7rem);
 }
+
 .preloader__sector:nth-child(12) {
   transform: rotateY(132deg) translateZ(7rem);
 }
+
 .preloader__sector:nth-child(13) {
   transform: rotateY(144deg) translateZ(7rem);
 }
+
 .preloader__sector:nth-child(14) {
   transform: rotateY(156deg) translateZ(7rem);
 }
+
 .preloader__sector:nth-child(15) {
   transform: rotateY(168deg) translateZ(7rem);
 }
+
 .preloader__sector:nth-child(16) {
   transform: rotateY(180deg) translateZ(7rem);
 }
+
 .preloader__sector:nth-child(17) {
   transform: rotateY(192deg) translateZ(7rem);
 }
+
 .preloader__sector:nth-child(18) {
   transform: rotateY(204deg) translateZ(7rem);
 }
+
 .preloader__sector:nth-child(19) {
   transform: rotateY(216deg) translateZ(7rem);
 }
+
 .preloader__sector:nth-child(20) {
   transform: rotateY(228deg) translateZ(7rem);
 }
+
 .preloader__sector:nth-child(21) {
   transform: rotateY(240deg) translateZ(7rem);
 }
+
 .preloader__sector:nth-child(22) {
   transform: rotateY(252deg) translateZ(7rem);
 }
+
 .preloader__sector:nth-child(23) {
   transform: rotateY(264deg) translateZ(7rem);
 }
+
 .preloader__sector:nth-child(24) {
   transform: rotateY(276deg) translateZ(7rem);
 }
+
 .preloader__sector:nth-child(25) {
   transform: rotateY(288deg) translateZ(7rem);
 }
+
 .preloader__sector:nth-child(26) {
   transform: rotateY(300deg) translateZ(7rem);
 }
+
 .preloader__sector:nth-child(27) {
   transform: rotateY(312deg) translateZ(7rem);
 }
+
 .preloader__sector:nth-child(28) {
   transform: rotateY(324deg) translateZ(7rem);
 }
+
 .preloader__sector:nth-child(29) {
   transform: rotateY(336deg) translateZ(7rem);
 }
+
 .preloader__sector:nth-child(30) {
   transform: rotateY(348deg) translateZ(7rem);
 }
@@ -357,14 +458,17 @@ canvas {
   from {
     transform: rotateY(0) rotateX(30deg);
   }
+
   to {
     transform: rotateY(1turn) rotateX(30deg);
   }
 }
+
 @keyframes spin {
   from {
     transform: rotateY(0);
   }
+
   to {
     transform: rotateY(1turn);
   }
@@ -405,4 +509,5 @@ canvas {
 .one-line {
   white-space: nowrap;
 }
+
 /* end start game text*/

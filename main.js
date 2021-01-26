@@ -4,6 +4,6 @@ window.addEventListener("load", () => {
         var game = new Game();
         game.initialize();
         document.getElementById("loader").remove();
-    }, 5000);
+    }, 3000);
 
 });

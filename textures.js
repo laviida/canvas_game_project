@@ -78,26 +78,23 @@ class TextureManager {
 
     static loadTextures() {
         var promises = []
-        return new Promise(res => {
-            for (let index = 1; index < 22; index++) {
-                promises.push(new Promise(resolve => {
-                    let texture = new Image();
-                    texture.src = `./img/${index < 10 ? ("0" + index) : index}-Breakout-Tiles.png`;
-                    texture.id = `${index < 10 ? ("0" + index) : index}-Breakout-Tiles`;
-                    texture.onload = () => resolve(texture);
-                }))
-            }
+        for (let index = 1; index < 22; index++) {
+            promises.push(new Promise(resolve => {
+                let texture = new Image();
+                texture.src = `./img/${index < 10 ? ("0" + index) : index}-Breakout-Tiles.png`;
+                texture.id = `${index < 10 ? ("0" + index) : index}-Breakout-Tiles`;
+                texture.onload = () => resolve(texture);
+            }))
+        }
 
-            for (let index = 41; index < 51; index++) {
-                promises.push(new Promise(resolve => {
-                    let texture = new Image();
-                    texture.src = `./powers/${index}-Breakout-Tiles.png`;
-                    texture.id = `${index}-Breakout-Tiles`;
-                    texture.onload = () => resolve(texture);
-                }))
-            }
-            Promise.all(promises).then(values => res(values))
-        });
-
+        for (let index = 41; index < 51; index++) {
+            promises.push(new Promise(resolve => {
+                let texture = new Image();
+                texture.src = `./powers/${index}-Breakout-Tiles.png`;
+                texture.id = `${index}-Breakout-Tiles`;
+                texture.onload = () => resolve(texture);
+            }))
+        }
+        return Promise.all(promises);
     }
 }

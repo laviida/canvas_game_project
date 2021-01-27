@@ -78,7 +78,7 @@ class Game {
         this.showPlaceholderStart();
         this.showHud();
         this.updateLives();
-        this.createMap(MapManager.MAPS.space);
+        this.createMap(MapManager.MAPS.mario);
         setInterval(() => this.update(), 10);
     }
 

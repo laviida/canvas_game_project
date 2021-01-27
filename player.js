@@ -18,7 +18,6 @@ class Player {
         this.bgColorPicker = null;
         this.brdColorPicker = null;
 
-
     }
 
     initialize() {
@@ -42,6 +41,7 @@ class Player {
 
         this.game.ctx.fillStyle = this.bgcolor;
         this.game.ctx.fill();
+        this.game.ctx.lineWidth = 2;
         this.game.ctx.strokeStyle = this.brdcolor;
         this.game.ctx.stroke();
     }

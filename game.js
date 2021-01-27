@@ -10,6 +10,7 @@ class Game {
         this.player = null;
         this.balls = []; // id = 1; main Ball 
         this.bricks = [];
+        //this.powers = [];
         this.textures = {};
         this.mapManager = new MapManager(this);
         this.paused = false;
@@ -30,6 +31,7 @@ class Game {
         this.brdColorPickerBall = null;
         this.bgColorPickerBall = null;
         this.placeholder = false;
+        this.lives = 3;
     }
 
     initialize() {
@@ -74,8 +76,46 @@ class Game {
         $('#myModal').modal('hide');
 
         this.showPlaceholderStart();
+        this.showHud();
+        this.updateLives();
         this.createMap(MapManager.MAPS.space);
         setInterval(() => this.update(), 10);
+    }
+
+    showHud() {
+        document.getElementById("hud").style.display = "block";
+    }
+
+    hideHud() {
+        document.getElementById("hud").style.display = "none";
+    }
+
+    die() {
+        this.pause({
+            type: "click"
+        });
+        this.pause_element.style.background = "url('./img/form_icons/pause.png')";
+        this.pause_element.style.backgroundRepeat = "no-repeat";
+        this.pause_element.style.backgroundPosition = "center";
+        this.pause_element.style.backgroundSize = "cover";
+        this.placeholder = false;
+        this.showPlaceholderStart();
+        this.lives--;
+        if (this.lives == 0) this.resetGame() //lose
+        else this.updateLives();
+        this.resetGame();
+    }
+
+    resetGame() {
+        this.player.x = (this.metrics.width / 2) - (this.window_metrics.width * 0.15) / 2;
+        this.balls.forEach(ball => {
+            ball.x = (this.metrics.width / 2) - (this.window_metrics.width * 0.009) / 2;
+            ball.y = this.player.y - this.window_metrics.width * 0.009;
+        });
+    }
+
+    updateLives() {
+        document.getElementById("lives").innerHTML = this.lives;
     }
 
     resetSettings() {
@@ -117,6 +157,7 @@ class Game {
         window.addEventListener("keypress", (e) => {
             if (e.keyCode == 32 && !this.placeholder) {
                 this.placeholder = true;
+                this.paused = false;
                 this.hidePlaceholderStart();
                 document.getElementById("pause").style.display = "block";
                 document.getElementById("menu").style.display = "block";
@@ -153,9 +194,9 @@ class Game {
         this.balls.forEach(ball => ball.update());
         this.bricks.forEach(brick => brick.update());
         this.bricks = this.bricks.filter(brick => !brick.die);
-
+        //this.powers.forEach(p => p.update());
+        //this.powers = this.powers.filter(p => !p.die);
     }
-
 
     paintBackground(color) {
         this.ctx.fillStyle = color;
@@ -172,11 +213,11 @@ class Game {
             if (this.paused) {
                 this.player.pause();
                 this.balls.forEach(ball => ball.pause());
-                this.pause_element.style.background = "url('../img/form_icons/pause_filled.png')";
+                this.pause_element.style.background = "url('./img/form_icons/pause_filled.png')";
             } else {
                 this.player.start();
                 this.balls.forEach(ball => ball.start());
-                this.pause_element.style.background = "url('../img/form_icons/pause.png')";
+                this.pause_element.style.background = "url('./img/form_icons/pause.png')";
             }
             this.pause_element.style.backgroundRepeat = "no-repeat";
             this.pause_element.style.backgroundPosition = "center";
@@ -185,8 +226,6 @@ class Game {
     }
 
     ballsColorPickersListeners() {
-
-
 
         this.bgColorPickerBall = new iro.ColorPicker(".colorPicker3", {
             width: this.window_metrics.width * 0.05,

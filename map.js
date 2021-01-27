@@ -164,7 +164,13 @@ class MapManager {
                     map[index1][index] == this.MAP_BRICK_BLACK ? texture = TextureManager.BRICK_TEXTURE_SETS.black.normal :
                     texture = TextureManager.BRICK_TEXTURE_SETS.purple.normal;
 
-                this.game.bricks.push(new Brick(index, (startX + (brick_width * index)) + col_gap * index, startY + (index1 * brick_height) + row_gap, brick_width, brick_height, die, texture, this.game));
+                var power = Math.random() > 1;
+                var brick = new Brick(index, (startX + (brick_width * index)) + col_gap * index, startY + (index1 * brick_height) + row_gap, brick_width, brick_height, die, texture, this.game, power, null);
+                // var p = new PowerUp(brick);
+                // if (power && !die) this.game.powers.push(p);
+                // brick.brdcolor = p.brickColor;
+
+                this.game.bricks.push(brick);
                 this.game.bricks.forEach(brick => brick.initialize());
             }
         }

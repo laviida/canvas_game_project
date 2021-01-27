@@ -153,6 +153,29 @@ button.grey-with-red:hover {
   animation: placeholder 1s linear alternate infinite;
 }
 
+#hud {
+  position: absolute;
+  display: none;
+  bottom: 20px;
+  left: 20px;
+
+}
+
+#hud>img {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+}
+
+#hud>span {
+  display: inline-block;
+  position: relative;
+  font-size: medium;
+  top: 2px;
+  color: white;
+  font-family: "Press Start 2P", monospace;
+}
+
 @keyframes placeholder {
   from {
     transform: scale(1);

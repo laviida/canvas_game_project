@@ -24,6 +24,7 @@ class Ball {
 
         this.game.ctx.fillStyle = this.bgcolor;
         this.game.ctx.fill();
+        this.game.ctx.lineWidth = 2;
         this.game.ctx.strokeStyle = this.brdcolor;
         this.game.ctx.stroke();
     }
@@ -32,7 +33,10 @@ class Ball {
         // game collisions
         if (this.x + this.r >= this.game.metrics.width) this.vx *= -1;
         if (this.x <= this.r) this.vx *= -1;
-        if (this.y + this.r >= this.game.metrics.height + this.game.metrics.top) this.vy *= -1;
+        if (this.y + this.r >= this.game.metrics.height + this.game.metrics.top) {
+            this.vy *= -1;
+            this.game.die();
+        }
         if (this.y <= this.game.metrics.top) this.vy *= -1;
 
         // player collisions
@@ -60,6 +64,7 @@ class Ball {
                 this.y + (this.vy * this.v) < brick.y + brick.h) {
                 this.vy *= -1;
                 brick.collide();
+                //       if (brick.die) this.game.powers.find(p => p.id = brick.id)?.start();
             }
 
             //H
@@ -82,11 +87,18 @@ class Ball {
     }
 
     start() {
-        this.v = 3;
+        this.normal();
     }
 
     pause() {
         this.v = 0;
     }
 
+    slow() {
+        this.v = 1.5;
+    }
+
+    normal() {
+        this.v = 3;
+    }
 }

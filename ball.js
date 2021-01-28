@@ -64,7 +64,11 @@ class Ball {
                 this.y + (this.vy * this.v) < brick.y + brick.h) {
                 this.vy *= -1;
                 brick.collide();
-                //       if (brick.die) this.game.powers.find(p => p.id = brick.id)?.start();
+                if (brick.die && brick.power) {
+                    var powerup = new PowerUp(brick);
+                    powerup.start();
+                    this.game.powers.push(powerup);
+                }
             }
 
             //H

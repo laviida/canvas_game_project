@@ -10,7 +10,7 @@ class Game {
         this.player = null;
         this.balls = []; // id = 1; main Ball 
         this.bricks = [];
-        //this.powers = [];
+        this.powers = [];
         this.textures = {};
         this.mapManager = new MapManager(this);
         this.paused = false;
@@ -35,6 +35,10 @@ class Game {
     }
 
     initialize() {
+        Array.prototype.random = function () {
+            return this[Math.floor((Math.random() * this.length))];
+        }
+
         TextureManager.loadTextures().then(textures => {
             document.getElementById("game").style.display = "block";
             this.textures = textures;
@@ -78,7 +82,7 @@ class Game {
         this.showPlaceholderStart();
         this.showHud();
         this.updateLives();
-        this.createMap(MapManager.MAPS.mario);
+        this.createMap(MapManager.MAPS.space);
         setInterval(() => this.update(), 10);
     }
 
@@ -102,8 +106,10 @@ class Game {
         this.showPlaceholderStart();
         this.lives--;
         if (this.lives == 0) this.resetGame() //lose
-        else this.updateLives();
-        this.resetGame();
+        else {
+            this.updateLives();
+            this.resetGame();
+        }
     }
 
     resetGame() {
@@ -112,6 +118,28 @@ class Game {
             ball.x = (this.metrics.width / 2) - (this.window_metrics.width * 0.009) / 2;
             ball.y = this.player.y - this.window_metrics.width * 0.009;
         });
+    }
+
+    startEvent(name) {
+        console.log(name);
+        switch (name) {
+            case "slow":
+                this.balls.forEach(ball => ball.slow());
+                setTimeout(() => this.balls.forEach(ball => ball.normal()), 5000);
+                break;
+            case "shrink":
+                this.player.shrink();
+                setTimeout(() => this.player.normal(), 5000);
+
+                break;
+            case "stretch":
+                this.player.stretch();
+                setTimeout(() => this.player.normal(), 5000);
+
+                break;
+            default:
+                break;
+        }
     }
 
     updateLives() {
@@ -186,7 +214,6 @@ class Game {
         return document.getElementById("canvas");
     }
 
-
     update() {
         this.clear();
         this.paintBackground("#000");
@@ -194,8 +221,8 @@ class Game {
         this.balls.forEach(ball => ball.update());
         this.bricks.forEach(brick => brick.update());
         this.bricks = this.bricks.filter(brick => !brick.die);
-        //this.powers.forEach(p => p.update());
-        //this.powers = this.powers.filter(p => !p.die);
+        this.powers.forEach(p => p.update());
+        this.powers = this.powers.filter(p => !p.die);
     }
 
     paintBackground(color) {

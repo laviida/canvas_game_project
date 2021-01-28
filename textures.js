@@ -46,9 +46,10 @@ class TextureManager {
         },
     }
 
-    static POWER_TEXTURES = {
-        slow: "41-Breakout-Tiles"
-    }
+    static POWER_TEXTURES = [{ id: "41-Breakout-Tiles", color: "#444", name: "slow" }, { id: "42-Breakout-Tiles", color: "#444" }, { id: "43-Breakout-Tiles", color: "#444" },
+    { id: "44-Breakout-Tiles", color: "#444" }, { id: "45-Breakout-Tiles", color: "#444" }, { id: "46-Breakout-Tiles", color: "#444", name: "shrink" },
+    { id: "47-Breakout-Tiles", color: "#444", name: "stretch" }, { id: "48-Breakout-Tiles", color: "#444" }, { id: "49-Breakout-Tiles", color: "#444" }, { id: "50-Breakout-Tiles", color: "#444" }]
+
 
     static BRICK_TEXTURES_NORMAL = ["01-Breakout-Tiles", "03-Breakout-Tiles", "05-Breakout-Tiles", "07-Breakout-Tiles", "09-Breakout-Tiles",
         "11-Breakout-Tiles", "13-Breakout-Tiles", "15-Breakout-Tiles", "17-Breakout-Tiles", "19-Breakout-Tiles", "21-Breakout-Tiles"

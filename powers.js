@@ -7,8 +7,8 @@ class PowerUp {
         this.h = parent.h;
         this.v = 0;
         this.game = parent.game;
-        this.texture = this.getRandomTexture();
-        this.brickColor = "#0f0";
+        this.eventName = parent.pup.name;
+        this.texture = parent.texturePowerUp;
         this.show = false;
         this.die = false;
     }
@@ -16,18 +16,14 @@ class PowerUp {
     start() {
         this.show = true;
         this.v = 3;
-        console.log(this.texture);
     }
 
     move() {
-        if (this.y >= this.game.h) this.die = false;
+        if (this.y + this.h >= this.game.metrics.height + this.game.metrics.top) this.die = true;
+        else if (this.y + this.h + this.v >= this.game.player.y &&
+            this.x + this.w > this.game.player.x &&
+            this.x < this.game.player.x + this.game.player.w) { this.game.startEvent(this.eventName); this.die = true }
         this.y += this.v;
-    }
-
-    getRandomTexture() {
-        var id_texture = Math.round((Math.random() * 10)) + 41;
-        //return TextureManager.getTexture(id_texture, this.game.textures);
-        return TextureManager.POWER_TEXTURES.slow;
     }
 
     update() {

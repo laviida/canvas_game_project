@@ -7,6 +7,7 @@ class Player {
         this.x = x;
         this.y = y;
         this.w = w;
+        this.first_w = w;
         this.h = h;
         this.r = r;
         this.vx = 0;
@@ -98,4 +99,16 @@ class Player {
 
         this.brdColorPicker.on(["color:init", "color:change"], (color) => this.brdcolor = color.hexString);
     }
+    stretch() {
+        this.w = this.w * 1.3;
+    }
+
+    shrink() {
+        this.w = this.w * 0.7;
+    }
+
+    normal() {
+        this.w = this.first_w;
+    }
+
 }

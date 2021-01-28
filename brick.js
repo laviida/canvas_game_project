@@ -8,7 +8,7 @@ class Brick {
         this.game = game;
         this.texture = TextureManager.getTexture(texture, this.game.textures);
         this.die = die;
-        this.power = Math.random() > 0.15;
+        this.power = Math.random() > 0.9;
         this.pup = this.power ? TextureManager.POWER_TEXTURES.random() : null;
         this.texturePowerUp = this.power ? TextureManager.getTexture(this.pup.id, this.game.textures) : null;
     }
@@ -18,6 +18,7 @@ class Brick {
     }
 
     draw() {
+        if (!this.texture) console.log(this.texture);
         this.game.ctx.drawImage(this.texture, this.x, this.y, this.w, this.h);
         if (this.power) {
             this.game.ctx.strokeStyle = this.pup.color;
@@ -26,10 +27,10 @@ class Brick {
         }
     }
 
-    collide() {
-        if (TextureManager.getBrickState(this.texture.id) == TextureManager.BRICK_STATE.NORMAL) this.setTexture(TextureManager.getCrackedTextureId(this.texture.id));
+    collide(lava) {
+        if (lava) this.die = true;
+        else if (TextureManager.getBrickState(this.texture.id) == TextureManager.BRICK_STATE.NORMAL) this.setTexture(TextureManager.getCrackedTextureId(this.texture.id));
         else if (TextureManager.getBrickState(this.texture.id) == TextureManager.BRICK_STATE.CRACKED) this.die = true;
-
     }
 
     setTexture(texture) {

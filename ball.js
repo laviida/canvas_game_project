@@ -10,6 +10,15 @@ class Ball {
         this.bgcolor = bgcolor;
         this.brdcolor = "#fff";
         this.game = game;
+        this.lava_ball = false;
+        this.lavaSettings = {
+            bgcolor: "#cf6010",
+            brdcolor: "#cf1020"
+        }
+        this.initSettings = {
+            bgcolor: this.bgcolor,
+            brdcolor: this.brdcolor
+        }
     }
 
     initialize() {
@@ -31,13 +40,13 @@ class Ball {
 
     move() {
         // game collisions
-        if (this.x + this.r >= this.game.metrics.width) this.vx *= -1;
-        if (this.x <= this.r) this.vx *= -1;
+        if (this.x + this.r >= this.game.metrics.width) this.vx = this.vx == 1 ? -1 : 1;
+        if (this.x <= this.r) this.vx = this.vx == 1 ? -1 : 1;
         if (this.y + this.r >= this.game.metrics.height + this.game.metrics.top) {
-            this.vy *= -1;
+            this.vy = this.vy == 1 ? -1 : 1;
             this.game.die();
         }
-        if (this.y <= this.game.metrics.top) this.vy *= -1;
+        if (this.y <= this.game.metrics.top) this.vy = this.vy == 1 ? -1 : 1;
 
         // player collisions
         // V
@@ -45,7 +54,7 @@ class Ball {
             this.x < this.game.player.x + this.game.player.w &&
             this.y + this.r + (this.vy * this.v) > this.game.player.y &&
             this.y + (this.vy * this.v) < this.game.player.y + this.game.player.h) {
-            this.vy *= -1;
+            this.vy = (this.vy > 0 ? -1 : 1); //* Math.abs((this.x - this.game.player.x).map(0, this.game.player.w, -2, 2));
         }
         //H
         if (this.x + this.r + (this.vx * this.v) > this.game.player.x &&
@@ -62,8 +71,8 @@ class Ball {
                 this.x < brick.x + brick.w &&
                 this.y + this.r + (this.vy * this.v) > brick.y &&
                 this.y + (this.vy * this.v) < brick.y + brick.h) {
-                this.vy *= -1;
-                brick.collide();
+                if (!this.lava_ball) this.vy = this.vy > 0 ? -1 : 1;
+                brick.collide(this.lava_ball);
                 if (brick.die && brick.power) {
                     var powerup = new PowerUp(brick);
                     powerup.start();
@@ -76,8 +85,8 @@ class Ball {
                 this.x + (this.vx * this.v) < brick.x + brick.w &&
                 this.y + this.r > brick.y &&
                 this.y < brick.y + brick.h) {
-                this.vx *= -1;
-                brick.collide();
+                if (!this.lava_ball) this.vx = this.vx > 0 ? -1 : 1;
+                brick.collide(this.lava_ball);
             }
         });
 
@@ -102,7 +111,20 @@ class Ball {
         this.v = 1.5;
     }
 
+    fast() {
+        this.v = 4.5;
+    }
+
     normal() {
+        this.lava_ball = false;
         this.v = 3;
+        this.bgcolor = this.initSettings.bgcolor;
+        this.brdcolor = this.initSettings.brdcolor;
+    }
+
+    lava() {
+        this.lava_ball = true;
+        this.bgcolor = this.lavaSettings.bgcolor;
+        this.brdcolor = this.lavaSettings.brdcolor;
     }
 }

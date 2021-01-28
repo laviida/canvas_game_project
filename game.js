@@ -1,5 +1,9 @@
 class Game {
-    constructor() {
+    static GAMEMODE = {
+        ARCADE: "ARCADE",
+        SELECTION: "SELECTION"
+    }
+    constructor(gamemode) {
         this.window_metrics = {
             width: window.innerWidth,
             height: window.innerHeight
@@ -32,14 +36,22 @@ class Game {
         this.bgColorPickerBall = null;
         this.placeholder = false;
         this.lives = 3;
+        this.gamemode = gamemode;
+        this.mapFinishedEvent = new Event("map_finished");
+        this.currentMap = null;
     }
 
     initialize() {
         Array.prototype.random = function () {
-            return this[Math.floor((Math.random() * this.length))];
+            return this[Math.floor((Math.random() * this.length))]
         }
+        Number.prototype.map = function (x1, y1, x2, y2) {
+            return (this - x1) * (y2 - x2) / (y1 - x1) + x2
+        };
+
 
         TextureManager.loadTextures().then(textures => {
+            this.currentMap = this.mapManager.getRandomMap();
             document.getElementById("game").style.display = "block";
             this.textures = textures;
             this.ctx = this.canvasElement.getContext("2d");
@@ -72,18 +84,33 @@ class Game {
             document.getElementById("start_game").addEventListener("click", () => this.start());
             this.save_settings.addEventListener("click", () => this.saveSettings());
             this.reset_settings.addEventListener("click", () => this.resetSettings());
+            this.finishHandler();
             this.showStartForm();
         });
     }
 
     start() {
         $('#myModal').modal('hide');
-
+        if (this.gamemode == Game.GAMEMODE.ARCADE) this.currentMap = this.mapManager.getRandomMap();
         this.showPlaceholderStart();
         this.showHud();
         this.updateLives();
-        this.createMap(MapManager.MAPS.space);
+        this.createMap();
         setInterval(() => this.update(), 10);
+
+    }
+
+    finishHandler() {
+        this.mapFinishedEvent.initEvent("map_finished", true, true);
+        document.addEventListener("map_finished", this.finish, {
+            once: true
+        });
+    }
+
+    finish() {
+        //mostrar win form next?
+        this.start();
+
     }
 
     showHud() {
@@ -121,7 +148,6 @@ class Game {
     }
 
     startEvent(name) {
-        console.log(name);
         switch (name) {
             case "slow":
                 this.balls.forEach(ball => ball.slow());
@@ -129,17 +155,28 @@ class Game {
                 break;
             case "shrink":
                 this.player.shrink();
-                setTimeout(() => this.player.normal(), 5000);
-
+                setTimeout(() => this.player.normal(), 8000);
                 break;
             case "stretch":
                 this.player.stretch();
+                setTimeout(() => this.player.normal(), 8000);
+                break;
+            case "lava":
+                this.balls.forEach(ball => ball.lava());
+                setTimeout(() => this.balls.forEach(ball => ball.normal()), 10000);
+                break;
+            case "invisible":
+                this.player.invisible();
                 setTimeout(() => this.player.normal(), 5000);
-
+                break;
+            case "fast":
+                this.balls.forEach(ball => ball.fast());
+                setTimeout(() => this.balls.forEach(ball => ball.fast()), 5000);
                 break;
             default:
                 break;
         }
+
     }
 
     updateLives() {
@@ -200,8 +237,8 @@ class Game {
         this.placeholder_start.style.display = "none";
     }
 
-    createMap(map) {
-        this.mapManager.drawMap(map);
+    createMap() {
+        this.mapManager.drawMap(this.currentMap);
     }
 
     createCanvasElement() {
@@ -223,6 +260,8 @@ class Game {
         this.bricks = this.bricks.filter(brick => !brick.die);
         this.powers.forEach(p => p.update());
         this.powers = this.powers.filter(p => !p.die);
+        if (this.bricks.length == 0) document.dispatchEvent(this.mapFinishedEvent);
+
     }
 
     paintBackground(color) {
@@ -263,7 +302,12 @@ class Game {
         });
 
         this.bgColorPickerBall.on(["color:init", "color:change"], (color) => {
-            this.balls.forEach(ball => ball.bgcolor = color.hexString);
+            this.balls.forEach(ball => {
+                ball.bgcolor = color.hexString;
+                ball.initSettings.bgcolor = color.hexString;
+
+            });
+
         });
 
         this.brdColorPickerBall = new iro.ColorPicker(".colorPicker4", {
@@ -275,7 +319,10 @@ class Game {
         });
 
         this.brdColorPickerBall.on(["color:init", "color:change"], (color) => {
-            this.balls.forEach(ball => ball.brdcolor = color.hexString);
+            this.balls.forEach(ball => {
+                ball.brdcolor = color.hexString;
+                ball.initSettings.brdcolor = color.hexString;
+            });
         });
     }
 

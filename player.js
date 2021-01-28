@@ -18,7 +18,7 @@ class Player {
         this.moves = [false, false]; // left - right
         this.bgColorPicker = null;
         this.brdColorPicker = null;
-
+        this._invisible = false;
     }
 
     initialize() {
@@ -79,6 +79,7 @@ class Player {
     }
 
     settingsListeners() {
+
         this.bgColorPicker = new iro.ColorPicker(".colorPicker", {
             width: this.game.window_metrics.width * 0.05,
             color: this.initialSettings.bgcolor,
@@ -87,7 +88,10 @@ class Player {
             layoutDirection: "horizontal"
         });
 
-        this.bgColorPicker.on(["color:init", "color:change"], (color) => this.bgcolor = color.hexString);
+        this.bgColorPicker.on(["color:init", "color:change"], (color) => {
+            this.initialSettings.bgcolor = color.hexString;
+            this.bgcolor = color.hexString;
+        });
 
         this.brdColorPicker = new iro.ColorPicker(".colorPicker2", {
             width: this.game.window_metrics.width * 0.05,
@@ -97,7 +101,10 @@ class Player {
             layoutDirection: "horizontal"
         });
 
-        this.brdColorPicker.on(["color:init", "color:change"], (color) => this.brdcolor = color.hexString);
+        this.brdColorPicker.on(["color:init", "color:change"], (color) => {
+            this.initialSettings.brdcolor = color.hexString;
+            this.brdcolor = color.hexString;
+        });
     }
     stretch() {
         this.w = this.w * 1.3;
@@ -109,6 +116,15 @@ class Player {
 
     normal() {
         this.w = this.first_w;
+        this._invisible = false;
+        this.bgcolor = this.initialSettings.bgcolor;
+        this.brdcolor = this.initialSettings.brdcolor;
+    }
+
+    invisible() {
+        this._invisible = true;
+        this.bgcolor = "#000";
+        this.brdcolor = "#000";
     }
 
 }

@@ -46,9 +46,47 @@ class TextureManager {
         },
     }
 
-    static POWER_TEXTURES = [{ id: "41-Breakout-Tiles", color: "#444", name: "slow" }, { id: "42-Breakout-Tiles", color: "#444" }, { id: "43-Breakout-Tiles", color: "#444" },
-    { id: "44-Breakout-Tiles", color: "#444" }, { id: "45-Breakout-Tiles", color: "#444" }, { id: "46-Breakout-Tiles", color: "#444", name: "shrink" },
-    { id: "47-Breakout-Tiles", color: "#444", name: "stretch" }, { id: "48-Breakout-Tiles", color: "#444" }, { id: "49-Breakout-Tiles", color: "#444" }, { id: "50-Breakout-Tiles", color: "#444" }]
+    static POWER_TEXTURES = [{
+            id: "41-Breakout-Tiles",
+            color: "#173f5f",
+            name: "slow"
+        }, {
+            id: "42-Breakout-Tiles",
+            color: "#3caea3",
+            name: "fast"
+        }, {
+            id: "43-Breakout-Tiles",
+            color: "#20639b"
+        },
+        {
+            id: "44-Breakout-Tiles",
+            color: "#f6d55c",
+            name: "lava"
+
+        }, {
+            id: "45-Breakout-Tiles",
+            color: "#ed553b"
+        }, {
+            id: "46-Breakout-Tiles",
+            color: "#071e22",
+            name: "shrink"
+        },
+        {
+            id: "47-Breakout-Tiles",
+            color: "#ee2e31",
+            name: "stretch"
+        }, {
+            id: "48-Breakout-Tiles",
+            color: "#071e22"
+        }, {
+            id: "49-Breakout-Tiles",
+            color: "#dbaca4",
+            name: "invisible"
+        }, {
+            id: "50-Breakout-Tiles",
+            color: "#8baca4"
+        }
+    ]
 
 
     static BRICK_TEXTURES_NORMAL = ["01-Breakout-Tiles", "03-Breakout-Tiles", "05-Breakout-Tiles", "07-Breakout-Tiles", "09-Breakout-Tiles",

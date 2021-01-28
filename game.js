@@ -41,6 +41,8 @@ class Game {
         this.mapFinishedEvent = new Event("map_finished");
         this.currentMap = null;
         this.loop = null;
+        this.loader = document.getElementById("loader");
+        this.showingStartForm = true;
     }
 
     initialize() {
@@ -50,7 +52,6 @@ class Game {
         Number.prototype.map = function (x1, y1, x2, y2) {
             return (this - x1) * (y2 - x2) / (y1 - x1) + x2
         };
-
 
         TextureManager.loadTextures().then(textures => {
             this.currentMap = this.mapManager.getRandomMap();
@@ -84,24 +85,29 @@ class Game {
 
             this.user_element.addEventListener("click", () => this.showSettings());
             document.getElementById("start_game").addEventListener("click", () => this.start());
+            document.getElementById("gamemode").addEventListener("click", (e) => {
+                e.target.innerHTML = e.target.innerHTML == "GAMEMODE: " + Game.GAMEMODE.ARCADE ? "GAMEMODE: " + Game.GAMEMODE.SELECTION : "GAMEMODE: " + Game.GAMEMODE.ARCADE
+                e.target.previousElementSibling.classList.remove("purple-with-blue");
+                e.target.nextElementSibling.classList.remove("purple-with-blue");
+                e.target.classList.add("purple-with-blue");
+            });
+
             this.save_settings.addEventListener("click", () => this.saveSettings());
             this.reset_settings.addEventListener("click", () => this.resetSettings());
             this.finishHandler();
+            this.loader.remove();
             this.showStartForm();
         });
     }
 
     start() {
-        $('#myModal').modal('hide');
+        this.hideStartForm();
         if (this.gamemode == Game.GAMEMODE.ARCADE) this.currentMap = this.mapManager.getRandomMap();
         this.showPlaceholderStart();
         this.showHud();
         this.updateLives();
         this.createMap();
-        setInterval(() => this.update(), 10);
-        this.createMap();
-        setInterval(() => this.update(), 10);
-
+        this.loop = setInterval(() => this.update(), 10);
     }
 
     finishHandler() {
@@ -136,7 +142,7 @@ class Game {
         this.placeholder = false;
         this.showPlaceholderStart();
         this.lives--;
-        if (this.lives == 0) this.resetGame() //lose
+        if (this.lives <= 0) this.gameOver()
         else {
             this.updateLives();
             this.resetGame();
@@ -146,6 +152,10 @@ class Game {
     gameOver() {
         this.gameover_wrapper.style.display = "block";
         clearInterval(this.loop);
+        this.hideHud();
+        this.hidePlaceholderStart();
+        this.hideSettings();
+        this.clear();
     }
 
     resetGame() {
@@ -205,11 +215,16 @@ class Game {
     }
 
     showStartForm() {
+        this.showingStartForm = true;
         $("#myModal").modal({
             backdrop: "static"
         });
     }
 
+    hideStartForm() {
+        this.showingStartForm = false;
+        $('#myModal').modal('hide');
+    }
     showSettings() {
         if (!this.paused)
             this.pause({
@@ -297,6 +312,21 @@ class Game {
             this.pause_element.style.backgroundRepeat = "no-repeat";
             this.pause_element.style.backgroundPosition = "center";
             this.pause_element.style.backgroundSize = "cover";
+        } else if (e.type == "keyup" && this.showingStartForm) {
+            var buttons = document.querySelector(".buttons");
+            var actual = document.querySelector("[selected]");
+            if (e.keyCode == 13) {
+                if (Array.from(buttons.children).indexOf(actual) == 0) this.start();
+                else if (Array.from(buttons.children).indexOf(actual) == 1) actual.innerHTML = `GAMEMODE: ${actual.innerHTML == "GAMEMODE: " + Game.GAMEMODE.ARCADE ? Game.GAMEMODE.SELECTION : Game.GAMEMODE.ARCADE}`;
+                else console.log("in production difficulty");
+            } else {
+
+                if (e.keyCode == 38) (actual.previousElementSibling ?? buttons.lastElementChild).setAttribute("selected", "");
+                else if (e.keyCode == 40) (actual.nextElementSibling ?? buttons.firstElementChild).setAttribute("selected", "");
+                actual.removeAttribute("selected");
+                actual.classList.remove("purple-with-blue");
+                document.querySelector("[selected]").classList.add("purple-with-blue");
+            }
         }
     }
 

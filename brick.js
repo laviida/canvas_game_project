@@ -18,7 +18,6 @@ class Brick {
     }
 
     draw() {
-        if (!this.texture) console.log(this.texture);
         this.game.ctx.drawImage(this.texture, this.x, this.y, this.w, this.h);
         if (this.power) {
             this.game.ctx.strokeStyle = this.pup.color;

@@ -67,7 +67,8 @@ class Player {
 
     removeMove(ev) {
         var e = window.event || ev;
-        if (e.keyCode == 37 || e.keyCode == 39) this.moves = [false, false];
+        if (e.keyCode == 37) this.moves[0] = false;
+        if (e.keyCode == 39) this.moves[1] = false;
     }
 
     start() {

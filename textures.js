@@ -47,45 +47,45 @@ class TextureManager {
     }
 
     static POWER_TEXTURES = [{
-            id: "41-Breakout-Tiles",
-            color: "#173f5f",
-            name: "slow"
-        }, {
-            id: "42-Breakout-Tiles",
-            color: "#3caea3",
-            name: "fast"
-        }, {
-            id: "43-Breakout-Tiles",
-            color: "#20639b"
-        },
-        {
-            id: "44-Breakout-Tiles",
-            color: "#f6d55c",
-            name: "lava"
+        id: "41-Breakout-Tiles",
+        color: "#173f5f",
+        name: "slow"
+    }, {
+        id: "42-Breakout-Tiles",
+        color: "#3caea3",
+        name: "fast"
+    }, {
+        id: "43-Breakout-Tiles",
+        color: "#20639b"
+    },
+    {
+        id: "44-Breakout-Tiles",
+        color: "#f6d55c",
+        name: "lava"
 
-        }, {
-            id: "45-Breakout-Tiles",
-            color: "#ed553b"
-        }, {
-            id: "46-Breakout-Tiles",
-            color: "#071e22",
-            name: "shrink"
-        },
-        {
-            id: "47-Breakout-Tiles",
-            color: "#ee2e31",
-            name: "stretch"
-        }, {
-            id: "48-Breakout-Tiles",
-            color: "#071e22"
-        }, {
-            id: "49-Breakout-Tiles",
-            color: "#dbaca4",
-            name: "invisible"
-        }, {
-            id: "50-Breakout-Tiles",
-            color: "#8baca4"
-        }
+    }, {
+        id: "45-Breakout-Tiles",
+        color: "#ed553b"
+    }, {
+        id: "46-Breakout-Tiles",
+        color: "#071e22",
+        name: "shrink"
+    },
+    {
+        id: "47-Breakout-Tiles",
+        color: "#ee2e31",
+        name: "stretch"
+    }, {
+        id: "48-Breakout-Tiles",
+        color: "#071e22"
+    }, {
+        id: "49-Breakout-Tiles",
+        color: "#dbaca4",
+        name: "invisible"
+    }, {
+        id: "50-Breakout-Tiles",
+        color: "#8baca4"
+    }
     ]
 
 
@@ -117,7 +117,7 @@ class TextureManager {
 
     static loadTextures() {
         var promises = []
-        for (let index = 1; index < 22; index++) {
+        for (let index = 1; index < 23; index++) {
             promises.push(new Promise(resolve => {
                 let texture = new Image();
                 texture.src = `./img/${index < 10 ? ("0" + index) : index}-Breakout-Tiles.png`;

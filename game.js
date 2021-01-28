@@ -28,6 +28,7 @@ class Game {
         this.form_account = document.getElementById("form_account");
         this.save_settings = document.getElementById("save_settings");
         this.reset_settings = document.getElementById("reset_settings");
+        this.gameover_wrapper = document.getElementById("gameover_wrapper");
         this.initialSettingsBall = {
             bgcolor: "#fff",
             brdcolor: "#ff00ff"
@@ -39,6 +40,7 @@ class Game {
         this.gamemode = gamemode;
         this.mapFinishedEvent = new Event("map_finished");
         this.currentMap = null;
+        this.loop = null;
     }
 
     initialize() {
@@ -97,6 +99,8 @@ class Game {
         this.updateLives();
         this.createMap();
         setInterval(() => this.update(), 10);
+        this.createMap();
+        setInterval(() => this.update(), 10);
 
     }
 
@@ -137,6 +141,11 @@ class Game {
             this.updateLives();
             this.resetGame();
         }
+    }
+
+    gameOver() {
+        this.gameover_wrapper.style.display = "block";
+        clearInterval(this.loop);
     }
 
     resetGame() {

@@ -2,193 +2,192 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+  <title>Document</title>
 
-    <!--BOOTSTRAP 4.6.0 -->
-    <script>
-        window.jQuery = window.$ = require('jquery');
-    </script>
-    <script src="../node_modules/jquery/dist/jquery.js"></script>
-    <script src="../node_modules/popper.js/dist/umd/popper.js"></script>
-    <script src="../node_modules/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="./libs/splitting/splitting.js"></script>
+  <!--BOOTSTRAP 4.6.0 -->
+  <script>
+    window.jQuery = window.$ = require("jquery");
+  </script>
+  <script src="../node_modules/jquery/dist/jquery.js"></script>
+  <script src="../node_modules/popper.js/dist/umd/popper.js"></script>
+  <script src="../node_modules/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="./libs/splitting/splitting.js"></script>
 
-    <!-- COLOR PICKER -->
-    <script src="./libs/iro/iro.min.js"></script>
+  <!-- COLOR PICKER -->
+  <script src="./libs/iro/iro.min.js"></script>
 
-    <script src="game.js"></script>
-    <script src="brick.js"></script>
-    <script src="player.js"></script>
-    <script src="ball.js"></script>
-    <script src="textures.js"></script>
-    <script src="map.js"></script>
-    <script src="powers.js"></script>
-    <script src="main.js"></script>
+  <script src="game.js"></script>
+  <script src="brick.js"></script>
+  <script src="player.js"></script>
+  <script src="ball.js"></script>
+  <script src="textures.js"></script>
+  <script src="map.js"></script>
+  <script src="powers.js"></script>
+  <script src="main.js"></script>
 
-    <link rel="stylesheet" href="./css/index.css">
-    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P|Permanent+Marker" rel="stylesheet">
-    <link href='https://fonts.googleapis.com/css?family=VT323' rel='stylesheet' type='text/css'>
-
+  <link rel="stylesheet" href="./css/index.css" />
+  <link href="https://fonts.googleapis.com/css?family=Press+Start+2P|Permanent+Marker" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=VT323" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
-    <div id="game">
-        <div id="pause" title="Play / Pause game"></div>
-        <div id="settings" title="Settings"></div>
-        <div id="menu">
-            <div id="camera" title="Take a picture of canvas" class="menu_item"></div>
-            <div id="user" title="User settings" class="menu_item"></div>
-        </div>
-        <!-- The Modal -->
-        <div></div>
-        <div class="modal fade mw-100 w-100 mx-auto" id="myModal">
-            <div class="modal-dialog modal-dialog-centered mw-100 w-50">
-                <div class="modal-content" style="background-color: rgba(0, 0, 0, 0);">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col">
-                                <div class="title" data-splitting="lines" style="background-color: rgba(0, 0, 0, 0);">
-                                    BRICK<br />
-                                    BREAKER
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row ">
-                            <div class="col">
-                                <div class="buttons grey-with-red">
-                                    <a class="purple-with-blue one-line" id="start_game" selected>START GAME</a>
-                                    <a class="one-line" id="gamemode">GAMEMODE: ARCADE</a>
-                                    <a class="one-line" id="difficulty">DIFFICULTY: NOOB</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+  <div id="game">
+    <div id="pause" title="Play / Pause game"></div>
+    <div id="settings" title="Settings"></div>
+    <div id="menu">
+      <div id="camera" title="Take a picture of canvas" class="menu_item"></div>
+      <div id="user" title="User settings" class="menu_item"></div>
+    </div>
+    <!-- The Modal -->
+    <div></div>
+    <div class="modal fade mw-100 w-100 mx-auto" id="myModal">
+      <div class="modal-dialog modal-dialog-centered mw-100 w-50">
+        <div class="modal-content" style="background-color: rgba(0, 0, 0, 0)">
+          <div class="container">
+            <div class="row">
+              <div class="col">
+                <div class="title" data-splitting="lines" style="background-color: rgba(0, 0, 0, 0)">
+                  BRICK<br />
+                  BREAKER
                 </div>
+              </div>
             </div>
-        </div>
-    </div>
-    <div id="gameover_wrapper">
-        <div class="game_over_title">GAME OVER</div>
-    </div>
-    <h2 id="placeholder_start" class="grey-with-red one-line">press space to start</h2>
-    <div id="hud">
-        <img src="./img/form_icons/heart.png" alt="heart icon">
-        <span id="lives"></span>
-    </div>
-    <div class="accountFormWrapper">
-        <div id="form_account">
-            <div class="container">
-                <div class="row">
-                    <div class="col purple-with-blue text-center underline one-line">settings</div>
+            <div class="row">
+              <div class="col">
+                <div class="buttons grey-with-red">
+                  <a class="purple-with-blue one-line" id="start_game" selected>START GAME</a>
+                  <a class="one-line" id="gamemode">GAMEMODE: ARCADE</a>
+                  <a class="one-line" id="difficulty">DIFFICULTY: NOOB</a>
                 </div>
-                <div class="row mb-3">
-                    <div class="col purple-with-blue one-line align-self-center">user background color</div>
-                    <div class="col pr-5">
-                        <div class="colorPicker"></div>
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <div class="col purple-with-blue one-line align-self-center">user border color</div>
-                    <div class="col pr-5">
-                        <div class="colorPicker2"></div>
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <div class="col purple-with-blue one-line align-self-center">ball background color</div>
-                    <div class="col pr-5">
-                        <div class="colorPicker3"></div>
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <div class="col purple-with-blue one-line align-self-center">ball border color</div>
-                    <div class="col pr-5">
-                        <div class="colorPicker4"></div>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col d-flex justify-content-end">
-                        <button id="save_settings" class="grey-with-red one-line">save</button>
-                    </div>
-                    <div class="col d-flex justify-content-start">
-                        <button id="reset_settings" class="grey-with-red one-line">reset</button>
-                    </div>
-                </div>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
+  <div id="gameover_wrapper">
+    <div class="game_over_title">GAME OVER</div>
+    <div class="game_over_quote grey-with-red"></div>
+  </div>
+  <h2 id="placeholder_start" class="grey-with-red one-line">press space to start</h2>
+  <div id="hud">
+    <img src="./img/form_icons/heart.png" alt="heart icon" />
+    <span id="lives"></span>
+  </div>
+  <div class="accountFormWrapper">
+    <div id="form_account">
+      <div class="container">
+        <div class="row">
+          <div class="col purple-with-blue text-center underline one-line">settings</div>
+        </div>
+        <div class="row mb-3">
+          <div class="col purple-with-blue one-line align-self-center">user background color</div>
+          <div class="col pr-5">
+            <div class="colorPicker"></div>
+          </div>
+        </div>
 
-    <div id="loader" class="preloader">
-        <div class="preloader__ring">
-            <div class="preloader__sector">L</div>
-            <div class="preloader__sector">o</div>
-            <div class="preloader__sector">a</div>
-            <div class="preloader__sector">d</div>
-            <div class="preloader__sector">i</div>
-            <div class="preloader__sector">n</div>
-            <div class="preloader__sector">g</div>
-            <div class="preloader__sector">.</div>
-            <div class="preloader__sector">.</div>
-            <div class="preloader__sector">.</div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
+        <div class="row mb-3">
+          <div class="col purple-with-blue one-line align-self-center">user border color</div>
+          <div class="col pr-5">
+            <div class="colorPicker2"></div>
+          </div>
         </div>
-        <div class="preloader__ring">
-            <div class="preloader__sector">L</div>
-            <div class="preloader__sector">o</div>
-            <div class="preloader__sector">a</div>
-            <div class="preloader__sector">d</div>
-            <div class="preloader__sector">i</div>
-            <div class="preloader__sector">n</div>
-            <div class="preloader__sector">g</div>
-            <div class="preloader__sector">.</div>
-            <div class="preloader__sector">.</div>
-            <div class="preloader__sector">.</div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
-            <div class="preloader__sector"></div>
+
+        <div class="row mb-3">
+          <div class="col purple-with-blue one-line align-self-center">ball background color</div>
+          <div class="col pr-5">
+            <div class="colorPicker3"></div>
+          </div>
         </div>
+
+        <div class="row mb-3">
+          <div class="col purple-with-blue one-line align-self-center">ball border color</div>
+          <div class="col pr-5">
+            <div class="colorPicker4"></div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col d-flex justify-content-end">
+            <button id="save_settings" class="grey-with-red one-line">save</button>
+          </div>
+          <div class="col d-flex justify-content-start">
+            <button id="reset_settings" class="grey-with-red one-line">reset</button>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+
+  <div id="loader" class="preloader">
+    <div class="preloader__ring">
+      <div class="preloader__sector">L</div>
+      <div class="preloader__sector">o</div>
+      <div class="preloader__sector">a</div>
+      <div class="preloader__sector">d</div>
+      <div class="preloader__sector">i</div>
+      <div class="preloader__sector">n</div>
+      <div class="preloader__sector">g</div>
+      <div class="preloader__sector">.</div>
+      <div class="preloader__sector">.</div>
+      <div class="preloader__sector">.</div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+    </div>
+    <div class="preloader__ring">
+      <div class="preloader__sector">L</div>
+      <div class="preloader__sector">o</div>
+      <div class="preloader__sector">a</div>
+      <div class="preloader__sector">d</div>
+      <div class="preloader__sector">i</div>
+      <div class="preloader__sector">n</div>
+      <div class="preloader__sector">g</div>
+      <div class="preloader__sector">.</div>
+      <div class="preloader__sector">.</div>
+      <div class="preloader__sector">.</div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+      <div class="preloader__sector"></div>
+    </div>
+  </div>
 </body>
 
 </html>

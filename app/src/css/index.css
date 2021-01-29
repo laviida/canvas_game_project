@@ -19,6 +19,16 @@ body {
   display: none;
 }
 
+.game_over_quote {
+  text-align: center;
+  font-size: 2.5vw;
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 8%;
+
+}
+
 /* Hide scrollbar for IE, Edge and Firefox */
 .modal,
 .modal-dialog {
@@ -50,8 +60,7 @@ canvas {
   display: none;
   width: calc(100vh * 0.06);
   height: calc(100vh * 0.06);
-  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg)
-    brightness(96%) contrast(101%);
+  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg) brightness(96%) contrast(101%);
   cursor: pointer;
   background: url("../img/form_icons/pause.png");
   background-repeat: no-repeat;
@@ -60,8 +69,7 @@ canvas {
 }
 
 #pause:hover {
-  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg)
-    brightness(96%) contrast(101%);
+  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg) brightness(96%) contrast(101%);
   background: url("../img/form_icons/pause_filled.png");
   background-repeat: no-repeat;
   background-position: center;
@@ -75,8 +83,7 @@ canvas {
   display: none;
   width: calc(100vh * 0.06);
   height: calc(100vh * 0.06);
-  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg)
-    brightness(96%) contrast(101%);
+  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg) brightness(96%) contrast(101%);
   cursor: pointer;
   background: url("../img/form_icons/settings.png");
   background-repeat: no-repeat;
@@ -163,13 +170,13 @@ button.grey-with-red:hover {
   left: 20px;
 }
 
-#hud > img {
+#hud>img {
   display: inline-block;
   width: 20px;
   height: 20px;
 }
 
-#hud > span {
+#hud>span {
   display: inline-block;
   position: relative;
   font-size: medium;
@@ -204,8 +211,7 @@ button.grey-with-red:hover {
 #camera {
   display: none;
   top: 10px;
-  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg)
-    brightness(96%) contrast(101%);
+  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg) brightness(96%) contrast(101%);
   cursor: pointer;
   background: url("../img/form_icons/camera.png");
   background-repeat: no-repeat;
@@ -216,8 +222,7 @@ button.grey-with-red:hover {
 #user {
   display: none;
   top: 60px;
-  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg)
-    brightness(96%) contrast(101%);
+  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg) brightness(96%) contrast(101%);
   cursor: pointer;
   background: url("../img/form_icons/user.png");
   background-repeat: no-repeat;
@@ -290,10 +295,7 @@ button.grey-with-red:hover {
 
 @media screen and (min-width: 320px) {
   .title {
-    font-size: calc(
-      var(--min-font-size) * 1px + (var(--max-font-size) - var(--min-font-size)) *
-        ((100vw - 320px) / 680)
-    );
+    font-size: calc(var(--min-font-size) * 1px + (var(--max-font-size) - var(--min-font-size)) * ((100vw - 320px) / 680));
   }
 }
 
@@ -367,11 +369,9 @@ button.grey-with-red:hover {
 }
 
 .preloader__sector:empty:before {
-  background: linear-gradient(
-    transparent 45%,
-    currentColor 45% 55%,
-    transparent 55%
-  );
+  background: linear-gradient(transparent 45%,
+      currentColor 45% 55%,
+      transparent 55%);
   content: "";
 }
 
@@ -558,6 +558,7 @@ button.grey-with-red:hover {
   height: 100%;
   background-color: black;
 }
+
 .game_over_title {
   font-family: "VT323";
   font-size: 8em;
@@ -572,31 +573,37 @@ button.grey-with-red:hover {
     color: lime;
     text-shadow: 0 0 20px green;
   }
+
   25% {
     color: green;
     text-shadow: 2px 2px 2px lime;
     transform: translate(-2px, 1px);
   }
+
   40% {
     color: lime;
     text-shadow: none;
     transform: translate(0, 0);
   }
+
   50% {
     color: green;
     text-shadow: 5px 5px 2px blue, -5px -5px 2px red;
     transform: translate(0px, 5px);
   }
+
   70% {
     color: lime;
     text-shadow: none;
     transform: translate(0, 0);
   }
+
   80% {
     color: lime;
     text-shadow: 0 0 20px green;
     transform: translate(-2px, 1px);
   }
+
   100% {
     color: lime;
     text-shadow: none;

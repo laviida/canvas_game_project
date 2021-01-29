@@ -43,6 +43,7 @@ class Game {
         this.loop = null;
         this.loader = document.getElementById("loader");
         this.showingStartForm = true;
+        this.quotes = [];
     }
 
     initialize() {
@@ -53,50 +54,53 @@ class Game {
             return (this - x1) * (y2 - x2) / (y1 - x1) + x2
         };
 
-        TextureManager.loadTextures().then(textures => {
-            this.currentMap = this.mapManager.getRandomMap();
-            document.getElementById("game").style.display = "block";
-            this.textures = textures;
-            this.ctx = this.canvasElement.getContext("2d");
-            this.metrics = this.canvasElement.getBoundingClientRect();
-            this.paintBackground("#000");
-            this.player = new Player((this.metrics.width / 2) - (this.window_metrics.width * 0.15) / 2, this.metrics.height * 0.9, this.window_metrics.width * 0.15, this.window_metrics.height * 0.03, 5, null, null, this);
-            this.balls.push(new Ball(1, (this.metrics.width / 2) - (this.window_metrics.width * 0.009) / 2, this.player.y - this.window_metrics.width * 0.009, this.window_metrics.width * 0.009, this.initialSettingsBall.bgcolor, this));
-            this.balls.forEach(ball => ball.initialize());
-            this.player.initialize();
+        fetch("./json/data.json").then(res => res.json()).then(quotes => {
+            this.quotes = quotes;
+            TextureManager.loadTextures().then(textures => {
+                this.currentMap = this.mapManager.getRandomMap();
+                document.getElementById("game").style.display = "block";
+                this.textures = textures;
+                this.ctx = this.canvasElement.getContext("2d");
+                this.metrics = this.canvasElement.getBoundingClientRect();
+                this.paintBackground("#000");
+                this.player = new Player((this.metrics.width / 2) - (this.window_metrics.width * 0.15) / 2, this.metrics.height * 0.9, this.window_metrics.width * 0.15, this.window_metrics.height * 0.03, 5, null, null, this);
+                this.balls.push(new Ball(1, (this.metrics.width / 2) - (this.window_metrics.width * 0.009) / 2, this.player.y - this.window_metrics.width * 0.009, this.window_metrics.width * 0.009, this.initialSettingsBall.bgcolor, this));
+                this.balls.forEach(ball => ball.initialize());
+                this.player.initialize();
 
-            this.ballsColorPickersListeners();
+                this.ballsColorPickersListeners();
 
-            this.pause_element.addEventListener("click", (e) => this.pause(e));
-            window.addEventListener("keyup", (e) => this.pause(e));
+                this.pause_element.addEventListener("click", (e) => this.pause(e));
+                window.addEventListener("keyup", (e) => this.pause(e));
 
-            this.settings_element.addEventListener("click", (e) => {
-                this.settings_opened = !this.settings_opened;
-                e.target.classList.toggle("settings_animation");
-                this.menu_element.classList.toggle("menu_animation");
-                Array.from(this.menu_element.children).forEach(x => x.style.display = this.settings_opened ? "block" : "none");
+                this.settings_element.addEventListener("click", (e) => {
+                    this.settings_opened = !this.settings_opened;
+                    e.target.classList.toggle("settings_animation");
+                    this.menu_element.classList.toggle("menu_animation");
+                    Array.from(this.menu_element.children).forEach(x => x.style.display = this.settings_opened ? "block" : "none");
+                });
+                this.camera_element.addEventListener("click", () => {
+                    var link = document.createElement('a');
+                    link.setAttribute('download', 'canvas.png');
+                    link.setAttribute('href', this.canvasElement.toDataURL("image/png").replace("image/png", "image/octet-stream"));
+                    link.click();
+                });
+
+                this.user_element.addEventListener("click", () => this.showSettings());
+                document.getElementById("start_game").addEventListener("click", () => this.start());
+                document.getElementById("gamemode").addEventListener("click", (e) => {
+                    e.target.innerHTML = e.target.innerHTML == "GAMEMODE: " + Game.GAMEMODE.ARCADE ? "GAMEMODE: " + Game.GAMEMODE.SELECTION : "GAMEMODE: " + Game.GAMEMODE.ARCADE
+                    e.target.previousElementSibling.classList.remove("purple-with-blue");
+                    e.target.nextElementSibling.classList.remove("purple-with-blue");
+                    e.target.classList.add("purple-with-blue");
+                });
+
+                this.save_settings.addEventListener("click", () => this.saveSettings());
+                this.reset_settings.addEventListener("click", () => this.resetSettings());
+                this.finishHandler();
+                this.loader.remove();
+                this.showStartForm();
             });
-            this.camera_element.addEventListener("click", () => {
-                var link = document.createElement('a');
-                link.setAttribute('download', 'canvas.png');
-                link.setAttribute('href', this.canvasElement.toDataURL("image/png").replace("image/png", "image/octet-stream"));
-                link.click();
-            });
-
-            this.user_element.addEventListener("click", () => this.showSettings());
-            document.getElementById("start_game").addEventListener("click", () => this.start());
-            document.getElementById("gamemode").addEventListener("click", (e) => {
-                e.target.innerHTML = e.target.innerHTML == "GAMEMODE: " + Game.GAMEMODE.ARCADE ? "GAMEMODE: " + Game.GAMEMODE.SELECTION : "GAMEMODE: " + Game.GAMEMODE.ARCADE
-                e.target.previousElementSibling.classList.remove("purple-with-blue");
-                e.target.nextElementSibling.classList.remove("purple-with-blue");
-                e.target.classList.add("purple-with-blue");
-            });
-
-            this.save_settings.addEventListener("click", () => this.saveSettings());
-            this.reset_settings.addEventListener("click", () => this.resetSettings());
-            this.finishHandler();
-            this.loader.remove();
-            this.showStartForm();
         });
     }
 
@@ -151,6 +155,7 @@ class Game {
 
     gameOver() {
         this.gameover_wrapper.style.display = "block";
+        document.getElementsByClassName("game_over_quote")[0].innerHTML = "&#8220;" + this.quotes.random() + "&#8221";
         clearInterval(this.loop);
         this.hideHud();
         this.hidePlaceholderStart();
@@ -321,8 +326,8 @@ class Game {
                 else console.log("in production difficulty");
             } else {
 
-                if (e.keyCode == 38) (actual.previousElementSibling ?? buttons.lastElementChild).setAttribute("selected", "");
-                else if (e.keyCode == 40) (actual.nextElementSibling ?? buttons.firstElementChild).setAttribute("selected", "");
+                if (e.keyCode == 38)(actual.previousElementSibling ?? buttons.lastElementChild).setAttribute("selected", "");
+                else if (e.keyCode == 40)(actual.nextElementSibling ?? buttons.firstElementChild).setAttribute("selected", "");
                 actual.removeAttribute("selected");
                 actual.classList.remove("purple-with-blue");
                 document.querySelector("[selected]").classList.add("purple-with-blue");

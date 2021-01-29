@@ -70,7 +70,7 @@ class Ball {
             if (this.x + this.r > brick.x &&
                 this.x < brick.x + brick.w &&
                 this.y + this.r + (this.vy * this.v) > brick.y &&
-                this.y + (this.vy * this.v) < brick.y + brick.h) {
+                this.y + (this.vy * this.v) < brick.y + brick.h + this.r) {
                 if (!this.lava_ball) this.vy = this.vy > 0 ? -1 : 1;
                 brick.collide(this.lava_ball);
                 if (brick.die && brick.power) {

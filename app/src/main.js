@@ -1,5 +1,5 @@
 window.addEventListener("load", () => {
     Splitting();
-    var game = new Game(Game.GAMEMODE.ARCADE);
+    var game = new Game();
     game.initialize();
 });

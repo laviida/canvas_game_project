@@ -37,7 +37,7 @@ class Game {
         this.bgColorPickerBall = null;
         this.placeholder = false;
         this.lives = 3;
-        this.gamemode = gamemode;
+        this.gamemode = Game.GAMEMODE.ARCADE;
         this.mapFinishedEvent = new Event("map_finished");
         this.currentMap = null;
         this.loop = null;
@@ -57,7 +57,6 @@ class Game {
         fetch("./json/data.json").then(res => res.json()).then(quotes => {
             this.quotes = quotes;
             TextureManager.loadTextures().then(textures => {
-                this.currentMap = this.mapManager.getRandomMap();
                 document.getElementById("game").style.display = "block";
                 this.textures = textures;
                 this.ctx = this.canvasElement.getContext("2d");
@@ -89,7 +88,9 @@ class Game {
                 this.user_element.addEventListener("click", () => this.showSettings());
                 document.getElementById("start_game").addEventListener("click", () => this.start());
                 document.getElementById("gamemode").addEventListener("click", (e) => {
-                    e.target.innerHTML = e.target.innerHTML == "GAMEMODE: " + Game.GAMEMODE.ARCADE ? "GAMEMODE: " + Game.GAMEMODE.SELECTION : "GAMEMODE: " + Game.GAMEMODE.ARCADE
+                    let _gamemode = e.target.dataset.gamemode == Game.GAMEMODE.ARCADE ? Game.GAMEMODE.SELECTION : Game.GAMEMODE.ARCADE;
+                    this.gamemode = _gamemode;
+                    e.target.innerHTML = "GAMEMODE: " + _gamemode;
                     e.target.previousElementSibling.classList.remove("purple-with-blue");
                     e.target.nextElementSibling.classList.remove("purple-with-blue");
                     e.target.classList.add("purple-with-blue");
@@ -106,25 +107,51 @@ class Game {
 
     start() {
         this.hideStartForm();
-        if (this.gamemode == Game.GAMEMODE.ARCADE) this.currentMap = this.mapManager.getRandomMap();
-        this.showPlaceholderStart();
-        this.showHud();
-        this.updateLives();
-        this.createMap();
-        this.loop = setInterval(() => this.update(), 10);
+        if (this.gamemode == Game.GAMEMODE.ARCADE) {
+            this.currentMap = this.mapManager.getRandomMap();
+            this.placeholder = false;
+            this.showPlaceholderStart();
+            this.showHud();
+            this.updateLives();
+            this.createMap();
+            this.loop = setInterval(() => this.update(), 10);
+        }
+        else this.showMapSelection();
+    }
+
+    showMapSelection() {
+        document.getElementById("map_selector").style.display = "block";
+        Array.from(document.getElementById("map_selector").getElementsByClassName("preview_map")).forEach(map => {
+            let func = (e) => {
+                this.hideMapSelection();
+                this.currentMap = this.mapManager.getMap(e.target.id);
+                this.showPlaceholderStart();
+                this.showHud();
+                this.updateLives();
+                this.createMap();
+                this.loop = setInterval(() => this.update(), 10);
+                map.removeEventListener("click", func);
+            }
+            map.addEventListener("click", func, { once: true });
+        });
+    }
+
+    hideMapSelection() {
+        document.getElementById("map_selector").style.display = "none";
     }
 
     finishHandler() {
         this.mapFinishedEvent.initEvent("map_finished", true, true);
-        document.addEventListener("map_finished", this.finish, {
+        document.addEventListener("map_finished", () => this.finish(), {
             once: true
         });
     }
 
     finish() {
-        //mostrar win form next?
+        clearInterval(this.loop);
+        this.clear();
+        this.resetGame();
         this.start();
-
     }
 
     showHud() {
@@ -169,6 +196,9 @@ class Game {
             ball.x = (this.metrics.width / 2) - (this.window_metrics.width * 0.009) / 2;
             ball.y = this.player.y - this.window_metrics.width * 0.009;
         });
+        this.lives = 3;
+        this.player.pause();
+        this.balls.forEach(ball => ball.pause());
     }
 
     startEvent(name) {
@@ -326,8 +356,8 @@ class Game {
                 else console.log("in production difficulty");
             } else {
 
-                if (e.keyCode == 38)(actual.previousElementSibling ?? buttons.lastElementChild).setAttribute("selected", "");
-                else if (e.keyCode == 40)(actual.nextElementSibling ?? buttons.firstElementChild).setAttribute("selected", "");
+                if (e.keyCode == 38) (actual.previousElementSibling ?? buttons.lastElementChild).setAttribute("selected", "");
+                else if (e.keyCode == 40) (actual.nextElementSibling ?? buttons.firstElementChild).setAttribute("selected", "");
                 actual.removeAttribute("selected");
                 actual.classList.remove("purple-with-blue");
                 document.querySelector("[selected]").classList.add("purple-with-blue");

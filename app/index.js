@@ -4,6 +4,11 @@ function createWindow() {
     const win = new BrowserWindow({
         width: 800,
         height: 600,
+        minHeight: 800,
+        minWidth: 600,
+        center: true,
+        darkTheme: true,
+        icon: "./src/img/logo.png",
         webPreferences: {
             nodeIntegration: true
         }

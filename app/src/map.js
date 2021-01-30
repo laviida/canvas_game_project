@@ -8,7 +8,7 @@ class MapManager {
     MAP_BRICK_ORANGE = "o";
     MAP_BRICK_BLACK = "k";
 
-    static MAPS = {
+    MAPS = {
         alien: [
             "----------",
             "----------",
@@ -130,7 +130,8 @@ class MapManager {
             "sososssssosos",
             "ssssoosoossss",
             "ssssoosoossss"
-        ]
+        ],
+        prova: ["-"]
     }
     constructor(game) {
         this.game = game;
@@ -158,11 +159,11 @@ class MapManager {
                 map[index1][index] == this.MAP_SPACE && map[index1].split(this.MAP_SPACE).length - 1 != map[index1].length ? die = true : die = false;
                 map[index1][index] == this.MAP_BRICK_RED ? texture = TextureManager.BRICK_TEXTURE_SETS.red.normal :
                     map[index1][index] == this.MAP_BRICK_BROWN ? texture = TextureManager.BRICK_TEXTURE_SETS.brown.normal :
-                    map[index1][index] == this.MAP_BRICK_BLUE ? texture = TextureManager.BRICK_TEXTURE_SETS.blue.normal :
-                    map[index1][index] == this.MAP_BRICK_YELLOW ? texture = TextureManager.BRICK_TEXTURE_SETS.yellow.normal :
-                    map[index1][index] == this.MAP_BRICK_ORANGE ? texture = TextureManager.BRICK_TEXTURE_SETS.orange.normal :
-                    map[index1][index] == this.MAP_BRICK_BLACK ? texture = TextureManager.BRICK_TEXTURE_SETS.black.normal :
-                    texture = TextureManager.BRICK_TEXTURE_SETS.purple.normal;
+                        map[index1][index] == this.MAP_BRICK_BLUE ? texture = TextureManager.BRICK_TEXTURE_SETS.blue.normal :
+                            map[index1][index] == this.MAP_BRICK_YELLOW ? texture = TextureManager.BRICK_TEXTURE_SETS.yellow.normal :
+                                map[index1][index] == this.MAP_BRICK_ORANGE ? texture = TextureManager.BRICK_TEXTURE_SETS.orange.normal :
+                                    map[index1][index] == this.MAP_BRICK_BLACK ? texture = TextureManager.BRICK_TEXTURE_SETS.black.normal :
+                                        texture = TextureManager.BRICK_TEXTURE_SETS.purple.normal;
 
                 var brick = new Brick(index, (startX + (brick_width * index)) + col_gap * index, startY + (index1 * brick_height) + row_gap, brick_width, brick_height, die, texture, this.game);
                 this.game.bricks.push(brick);
@@ -172,7 +173,11 @@ class MapManager {
     }
 
     getRandomMap() {
-        return MapManager.MAPS[Object.keys(MapManager.MAPS).random()];
+        return this.MAPS[Object.keys(this.MAPS).random()];
+    }
+
+    getMap(map) {
+        return this.MAPS[map];
     }
 
 }

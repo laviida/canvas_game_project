@@ -8,7 +8,7 @@ class Brick {
         this.game = game;
         this.texture = TextureManager.getTexture(texture, this.game.textures);
         this.die = die;
-        this.power = Math.random() > 0.1;
+        this.power = Math.random() > 0.9;
         this.pup = this.power ? TextureManager.POWER_TEXTURES.random() : null;
         this.texturePowerUp = this.power ? TextureManager.getTexture(this.pup.id, this.game.textures) : null;
     }

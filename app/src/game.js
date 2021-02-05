@@ -1,14 +1,19 @@
-class Game {
-    static GAMEMODE = {
-        ARCADE: "ARCADE",
-        SELECTION: "SELECTION"
-    }
-    constructor(gamemode) {
+import {
+    TextureManager
+} from "./textures.js";
+
+import {
+    Constants
+} from "./constants.js";
+
+export class Game {
+
+    constructor() {
         this.window_metrics = {
             width: window.innerWidth,
             height: window.innerHeight
         }
-        this.canvasElement = this.createCanvasElement();
+        this.canvasElement = null;
         this.ctx = null;
         this.metrics = null;
         this.player = null;
@@ -37,7 +42,8 @@ class Game {
         this.bgColorPickerBall = null;
         this.placeholder = false;
         this.lives = 3;
-        this.gamemode = Game.GAMEMODE.ARCADE;
+        this.gamemode = Constants.GAMEMODE.ARCADE;
+        this.difficulty = Constants.DIFFICULTY[0];
         this.mapFinishedEvent = new Event("map_finished");
         this.currentMap = null;
         this.loop = null;
@@ -47,76 +53,77 @@ class Game {
     }
 
     initialize() {
-        Array.prototype.random = function () {
-            return this[Math.floor((Math.random() * this.length))]
-        }
-        Number.prototype.map = function (x1, y1, x2, y2) {
-            return (this - x1) * (y2 - x2) / (y1 - x1) + x2
-        };
+        return new Promise(async (resolve) => {
+            Array.prototype.random = function () {
+                return this[Math.floor((Math.random() * this.length))]
+            }
+            Number.prototype.map = function (x1, y1, x2, y2) {
+                return (this - x1) * (y2 - x2) / (y1 - x1) + x2
+            };
 
-        fetch("./json/data.json").then(res => res.json()).then(quotes => {
-            this.quotes = quotes;
-            TextureManager.loadTextures().then(textures => {
-                document.getElementById("game").style.display = "block";
-                this.textures = textures;
-                this.ctx = this.canvasElement.getContext("2d");
-                this.metrics = this.canvasElement.getBoundingClientRect();
-                this.paintBackground("#000");
-                this.player = new Player((this.metrics.width / 2) - (this.window_metrics.width * 0.15) / 2, this.metrics.height * 0.9, this.window_metrics.width * 0.15, this.window_metrics.height * 0.03, 5, null, null, this);
-                this.balls.push(new Ball(1, (this.metrics.width / 2) - (this.window_metrics.width * 0.009) / 2, this.player.y - this.window_metrics.width * 0.009, this.window_metrics.width * 0.009, this.initialSettingsBall.bgcolor, this));
-                this.balls.forEach(ball => ball.initialize());
-                this.player.initialize();
+            var res = await fetch("./json/data.json");
+            this.quotes = await res.json();
+            this.textures = TextureManager.loadTextures();
 
-                this.ballsColorPickersListeners();
+            resolve();
+            /*
+                    this.player = new Player((this.metrics.width / 2) - (this.window_metrics.width * 0.15) / 2, this.metrics.height * 0.9, this.window_metrics.width * 0.15, this.window_metrics.height * 0.03, 5, null, null, this);
+                    this.balls.push(new Ball(1, (this.metrics.width / 2) - (this.window_metrics.width * 0.009) / 2, this.player.y - this.window_metrics.width * 0.009, this.window_metrics.width * 0.009, this.initialSettingsBall.bgcolor, this));
+                    this.balls.forEach(ball => ball.initialize());
+                    this.player.initialize();
 
-                this.pause_element.addEventListener("click", (e) => this.pause(e));
-                window.addEventListener("keyup", (e) => this.pause(e));
+                    this.ballsColorPickersListeners();
 
-                this.settings_element.addEventListener("click", (e) => {
-                    this.settings_opened = !this.settings_opened;
-                    e.target.classList.toggle("settings_animation");
-                    this.menu_element.classList.toggle("menu_animation");
-                    Array.from(this.menu_element.children).forEach(x => x.style.display = this.settings_opened ? "block" : "none");
+                    this.pause_element.addEventListener("click", (e) => this.pause(e));
+                    window.addEventListener("keyup", (e) => this.pause(e));
+
+                    this.settings_element.addEventListener("click", (e) => {
+                        this.settings_opened = !this.settings_opened;
+                        e.target.classList.toggle("settings_animation");
+                        this.menu_element.classList.toggle("menu_animation");
+                        Array.from(this.menu_element.children).forEach(x => x.style.display = this.settings_opened ? "block" : "none");
+                    });
+                    this.camera_element.addEventListener("click", () => {
+                        var link = document.createElement('a');
+                        link.setAttribute('download', 'canvas.png');
+                        link.setAttribute('href', this.canvasElement.toDataURL("image/png").replace("image/png", "image/octet-stream"));
+                        link.click();
+                    });
+
+                    this.user_element.addEventListener("click", () => this.showSettings());
+ 
+                    this.save_settings.addEventListener("click", () => this.saveSettings());
+                    this.reset_settings.addEventListener("click", () => this.resetSettings());
+                    this.finishHandler();
+                    this.loader.remove();
+                   
                 });
-                this.camera_element.addEventListener("click", () => {
-                    var link = document.createElement('a');
-                    link.setAttribute('download', 'canvas.png');
-                    link.setAttribute('href', this.canvasElement.toDataURL("image/png").replace("image/png", "image/octet-stream"));
-                    link.click();
-                });
-
-                this.user_element.addEventListener("click", () => this.showSettings());
-                document.getElementById("start_game").addEventListener("click", () => this.start());
-                document.getElementById("gamemode").addEventListener("click", (e) => {
-                    let _gamemode = e.target.dataset.gamemode == Game.GAMEMODE.ARCADE ? Game.GAMEMODE.SELECTION : Game.GAMEMODE.ARCADE;
-                    this.gamemode = _gamemode;
-                    e.target.innerHTML = "GAMEMODE: " + _gamemode;
-                    e.target.previousElementSibling.classList.remove("purple-with-blue");
-                    e.target.nextElementSibling.classList.remove("purple-with-blue");
-                    e.target.classList.add("purple-with-blue");
-                });
-
-                this.save_settings.addEventListener("click", () => this.saveSettings());
-                this.reset_settings.addEventListener("click", () => this.resetSettings());
-                this.finishHandler();
-                this.loader.remove();
-                this.showStartForm();
-            });
+            });*/
         });
     }
 
     start() {
-        this.hideStartForm();
-        if (this.gamemode == Game.GAMEMODE.ARCADE) {
-            this.currentMap = this.mapManager.getRandomMap();
-            this.placeholder = false;
-            this.showPlaceholderStart();
-            this.showHud();
-            this.updateLives();
-            this.createMap();
-            this.loop = setInterval(() => this.update(), 10);
-        }
-        else this.showMapSelection();
+        console.log("start");
+        this.canvasElement = document.getElementById("canvas");
+        this.ctx = this.canvasElement.getContext("2d");
+        this.metrics = this.canvasElement.getBoundingClientRect();
+        this.paintBackground("#000");
+
+        this.player = new Player((this.metrics.width / 2) - (this.window_metrics.width * 0.15) / 2, this.metrics.height * 0.9, this.window_metrics.width * 0.15, this.window_metrics.height * 0.03, 5, null, null, this);
+        this.balls.push(new Ball(1, (this.metrics.width / 2) - (this.window_metrics.width * 0.009) / 2, this.player.y - this.window_metrics.width * 0.009, this.window_metrics.width * 0.009, this.initialSettingsBall.bgcolor, this));
+        this.balls.forEach(ball => ball.initialize());
+        this.player.initialize();
+
+        /* this.hideStartForm();
+         if (this.gamemode == Game.GAMEMODE.ARCADE) {
+             this.currentMap = this.mapManager.getRandomMap();
+             this.placeholder = false;
+             this.showPlaceholderStart();
+             this.showHud();
+             this.updateLives();
+             this.createMap();
+             this.loop = setInterval(() => this.update(), 10);
+         } else this.showMapSelection();*/
     }
 
     showMapSelection() {
@@ -132,7 +139,9 @@ class Game {
                 this.loop = setInterval(() => this.update(), 10);
                 map.removeEventListener("click", func);
             }
-            map.addEventListener("click", func, { once: true });
+            map.addEventListener("click", func, {
+                once: true
+            });
         });
     }
 
@@ -249,12 +258,7 @@ class Game {
         this.hideSettings();
     }
 
-    showStartForm() {
-        this.showingStartForm = true;
-        $("#myModal").modal({
-            backdrop: "static"
-        });
-    }
+
 
     hideStartForm() {
         this.showingStartForm = false;
@@ -298,16 +302,6 @@ class Game {
 
     createMap() {
         this.mapManager.drawMap(this.currentMap);
-    }
-
-    createCanvasElement() {
-        let canvas = document.createElement("canvas");
-        canvas.id = "canvas";
-        canvas.width = this.window_metrics.width * 0.999;
-        canvas.height = this.window_metrics.height;
-        document.getElementById("game").appendChild(canvas);
-
-        return document.getElementById("canvas");
     }
 
     update() {
@@ -356,11 +350,6 @@ class Game {
                 else console.log("in production difficulty");
             } else {
 
-                if (e.keyCode == 38) (actual.previousElementSibling ?? buttons.lastElementChild).setAttribute("selected", "");
-                else if (e.keyCode == 40) (actual.nextElementSibling ?? buttons.firstElementChild).setAttribute("selected", "");
-                actual.removeAttribute("selected");
-                actual.classList.remove("purple-with-blue");
-                document.querySelector("[selected]").classList.add("purple-with-blue");
             }
         }
     }

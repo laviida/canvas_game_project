@@ -9,7 +9,7 @@ body {
 
 #game {
   position: relative;
-  display: none;
+  display: block;
   width: 100%;
   height: 100%;
 }
@@ -25,6 +25,7 @@ body {
   width: 100%;
   height: 100%;
 }
+
 .maps {
   position: absolute;
   top: 50%;
@@ -61,9 +62,11 @@ body {
 #space {
   background-image: url(../img/maps/space.png);
 }
+
 #emoji {
   background-image: url(../img/maps/emoji.png);
 }
+
 #ball {
   background-image: url(../img/maps/ball.png);
 }
@@ -108,8 +111,7 @@ canvas {
   display: none;
   width: calc(100vh * 0.06);
   height: calc(100vh * 0.06);
-  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg)
-    brightness(96%) contrast(101%);
+  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg) brightness(96%) contrast(101%);
   cursor: pointer;
   background: url("../img/form_icons/pause.png");
   background-repeat: no-repeat;
@@ -118,8 +120,7 @@ canvas {
 }
 
 #pause:hover {
-  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg)
-    brightness(96%) contrast(101%);
+  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg) brightness(96%) contrast(101%);
   background: url("../img/form_icons/pause_filled.png");
   background-repeat: no-repeat;
   background-position: center;
@@ -133,8 +134,7 @@ canvas {
   display: none;
   width: calc(100vh * 0.06);
   height: calc(100vh * 0.06);
-  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg)
-    brightness(96%) contrast(101%);
+  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg) brightness(96%) contrast(101%);
   cursor: pointer;
   background: url("../img/form_icons/settings.png");
   background-repeat: no-repeat;
@@ -221,13 +221,13 @@ button.grey-with-red:hover {
   left: 20px;
 }
 
-#hud > img {
+#hud>img {
   display: inline-block;
   width: 20px;
   height: 20px;
 }
 
-#hud > span {
+#hud>span {
   display: inline-block;
   position: relative;
   font-size: medium;
@@ -262,8 +262,7 @@ button.grey-with-red:hover {
 #camera {
   display: none;
   top: 10px;
-  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg)
-    brightness(96%) contrast(101%);
+  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg) brightness(96%) contrast(101%);
   cursor: pointer;
   background: url("../img/form_icons/camera.png");
   background-repeat: no-repeat;
@@ -274,8 +273,7 @@ button.grey-with-red:hover {
 #user {
   display: none;
   top: 60px;
-  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg)
-    brightness(96%) contrast(101%);
+  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg) brightness(96%) contrast(101%);
   cursor: pointer;
   background: url("../img/form_icons/user.png");
   background-repeat: no-repeat;
@@ -348,10 +346,7 @@ button.grey-with-red:hover {
 
 @media screen and (min-width: 320px) {
   .title {
-    font-size: calc(
-      var(--min-font-size) * 1px + (var(--max-font-size) - var(--min-font-size)) *
-        ((100vw - 320px) / 680)
-    );
+    font-size: calc(var(--min-font-size) * 1px + (var(--max-font-size) - var(--min-font-size)) * ((100vw - 320px) / 680));
   }
 }
 
@@ -362,6 +357,10 @@ button.grey-with-red:hover {
 }
 
 /* loader */
+#loader {
+  display: none;
+}
+
 * {
   border: 0;
   box-sizing: border-box;
@@ -425,11 +424,9 @@ button.grey-with-red:hover {
 }
 
 .preloader__sector:empty:before {
-  background: linear-gradient(
-    transparent 45%,
-    currentColor 45% 55%,
-    transparent 55%
-  );
+  background: linear-gradient(transparent 45%,
+      currentColor 45% 55%,
+      transparent 55%);
   content: "";
 }
 

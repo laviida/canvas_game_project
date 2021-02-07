@@ -14,16 +14,30 @@ body {
   height: 100%;
 }
 
+#forms {
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+}
+
 .modal::-webkit-scrollbar,
 .modal-dialog ::-webkit-scrollbar {
   display: none;
 }
 
 #map_selector {
-  display: none;
+  display: block;
   position: absolute;
   width: 100%;
   height: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .maps {
@@ -44,6 +58,7 @@ body {
   width: 20vw;
   height: 20vh;
   margin: 20px 20px;
+  cursor: pointer;
 }
 
 .preview_map:hover {
@@ -78,6 +93,7 @@ body {
   margin-left: auto;
   margin-right: auto;
   margin-top: 8%;
+  font-family: "Press Start 2P", monospace;
 }
 
 /* Hide scrollbar for IE, Edge and Firefox */
@@ -108,10 +124,11 @@ canvas {
   position: absolute;
   top: 20px;
   left: 20px;
-  display: none;
+  display: block;
   width: calc(100vh * 0.06);
   height: calc(100vh * 0.06);
-  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg) brightness(96%) contrast(101%);
+  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg)
+    brightness(96%) contrast(101%);
   cursor: pointer;
   background: url("../img/form_icons/pause.png");
   background-repeat: no-repeat;
@@ -120,7 +137,8 @@ canvas {
 }
 
 #pause:hover {
-  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg) brightness(96%) contrast(101%);
+  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg)
+    brightness(96%) contrast(101%);
   background: url("../img/form_icons/pause_filled.png");
   background-repeat: no-repeat;
   background-position: center;
@@ -131,10 +149,11 @@ canvas {
   position: absolute;
   top: 20px;
   right: 20px;
-  display: none;
+  display: block;
   width: calc(100vh * 0.06);
   height: calc(100vh * 0.06);
-  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg) brightness(96%) contrast(101%);
+  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg)
+    brightness(96%) contrast(101%);
   cursor: pointer;
   background: url("../img/form_icons/settings.png");
   background-repeat: no-repeat;
@@ -151,7 +170,7 @@ canvas {
   position: absolute;
   top: 80px;
   right: 19px;
-  display: none;
+  display: block;
   opacity: 0;
   width: calc(100vh * 0.06);
   height: 0;
@@ -165,12 +184,11 @@ canvas {
 
 #form_account {
   position: absolute;
-  display: none;
-  top: 30%;
+  display: block;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 80%;
-  height: 10%;
   text-transform: uppercase;
   font-family: "Press Start 2P", monospace;
 }
@@ -181,7 +199,7 @@ canvas {
 
 .accountFormWrapper {
   position: absolute;
-  display: none;
+  display: block;
   background-color: black;
   height: 100%;
   width: 100%;
@@ -208,26 +226,28 @@ button.grey-with-red:hover {
 
 #placeholder_start {
   position: absolute;
-  display: none;
+  display: block;
   font-family: "Press Start 2P", monospace;
   animation: placeholder 1s linear alternate infinite;
   font-size: 3vw;
+  top: 50%;
+  left: 20%;
 }
 
 #hud {
   position: absolute;
-  display: none;
+  display: block;
   bottom: 20px;
   left: 20px;
 }
 
-#hud>img {
+#hud > img {
   display: inline-block;
   width: 20px;
   height: 20px;
 }
 
-#hud>span {
+#hud > span {
   display: inline-block;
   position: relative;
   font-size: medium;
@@ -250,6 +270,9 @@ button.grey-with-red:hover {
   opacity: 1 !important;
   height: calc(100vh * 0.25) !important;
 }
+.modal-backdrop {
+  z-index: -1;
+}
 
 .menu_item {
   position: absolute;
@@ -262,7 +285,8 @@ button.grey-with-red:hover {
 #camera {
   display: none;
   top: 10px;
-  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg) brightness(96%) contrast(101%);
+  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg)
+    brightness(96%) contrast(101%);
   cursor: pointer;
   background: url("../img/form_icons/camera.png");
   background-repeat: no-repeat;
@@ -273,7 +297,8 @@ button.grey-with-red:hover {
 #user {
   display: none;
   top: 60px;
-  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg) brightness(96%) contrast(101%);
+  filter: invert(42%) sepia(15%) saturate(7390%) hue-rotate(10deg)
+    brightness(96%) contrast(101%);
   cursor: pointer;
   background: url("../img/form_icons/user.png");
   background-repeat: no-repeat;
@@ -346,7 +371,10 @@ button.grey-with-red:hover {
 
 @media screen and (min-width: 320px) {
   .title {
-    font-size: calc(var(--min-font-size) * 1px + (var(--max-font-size) - var(--min-font-size)) * ((100vw - 320px) / 680));
+    font-size: calc(
+      var(--min-font-size) * 1px + (var(--max-font-size) - var(--min-font-size)) *
+        ((100vw - 320px) / 680)
+    );
   }
 }
 
@@ -358,7 +386,11 @@ button.grey-with-red:hover {
 
 /* loader */
 #loader {
-  display: none;
+  display: block;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 * {
@@ -373,9 +405,6 @@ button.grey-with-red:hover {
 }
 
 .preloader {
-  display: block;
-  position: absolute;
-  top: 40%;
   margin: 0 auto;
   color: #3df1f1;
   line-height: 1.5;
@@ -424,9 +453,11 @@ button.grey-with-red:hover {
 }
 
 .preloader__sector:empty:before {
-  background: linear-gradient(transparent 45%,
-      currentColor 45% 55%,
-      transparent 55%);
+  background: linear-gradient(
+    transparent 45%,
+    currentColor 45% 55%,
+    transparent 55%
+  );
   content: "";
 }
 
@@ -608,7 +639,7 @@ button.grey-with-red:hover {
 /* game over */
 #gameover_wrapper {
   position: absolute;
-  display: none;
+  display: block;
   width: 100%;
   height: 100%;
   background-color: black;

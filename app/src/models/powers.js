@@ -1,4 +1,4 @@
-class PowerUp {
+export class PowerUp {
     constructor(parent) {
         this.id = parent.id;
         this.x = parent.x;

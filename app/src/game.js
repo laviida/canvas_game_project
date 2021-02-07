@@ -1,18 +1,13 @@
-import {
-    TextureManager
-} from "./textures.js";
-
-import {
-    Constants
-} from "./constants.js";
-
+import { TextureManager } from "./managers/textures.js";
+import { Constants } from "./utils/constants.js";
+import { Ball } from "./models/ball.js";
+import { Player } from "./models/player.js";
+import { ScreenManager } from "./managers/screen_manager.js";
+import { MapManager } from "./managers/map.js";
 export class Game {
 
     constructor() {
-        this.window_metrics = {
-            width: window.innerWidth,
-            height: window.innerHeight
-        }
+        this.window_metrics = { width: window.innerWidth, height: window.innerHeight }
         this.canvasElement = null;
         this.ctx = null;
         this.metrics = null;
@@ -21,35 +16,21 @@ export class Game {
         this.bricks = [];
         this.powers = [];
         this.textures = {};
-        this.mapManager = new MapManager(this);
-        this.paused = false;
-        this.pause_element = document.getElementById("pause");
-        this.settings_element = document.getElementById("settings");
-        this.settings_opened = false;
-        this.menu_element = document.getElementById("menu");
-        this.camera_element = document.getElementById("camera");
-        this.user_element = document.getElementById("user");
-        this.placeholder_start = document.getElementById("placeholder_start");
-        this.form_account = document.getElementById("form_account");
-        this.save_settings = document.getElementById("save_settings");
-        this.reset_settings = document.getElementById("reset_settings");
-        this.gameover_wrapper = document.getElementById("gameover_wrapper");
-        this.initialSettingsBall = {
-            bgcolor: "#fff",
-            brdcolor: "#ff00ff"
-        };
+        this.textureManager = new TextureManager();
+        this.mapManager = null;
         this.brdColorPickerBall = null;
         this.bgColorPickerBall = null;
-        this.placeholder = false;
+        this.bgColorPickerPlayer = null;
+        this.brdColorPickerPlayer = null;
         this.lives = 3;
-        this.gamemode = Constants.GAMEMODE.ARCADE;
-        this.difficulty = Constants.DIFFICULTY[0];
+        this.gamemode = Constants.gamemode().ARCADE;
+        this.difficulty = Constants.difficulty()[0];
         this.mapFinishedEvent = new Event("map_finished");
         this.currentMap = null;
         this.loop = null;
-        this.loader = document.getElementById("loader");
-        this.showingStartForm = true;
         this.quotes = [];
+        this.Ball_INIT_SETTINGS = { bgcolor: "#fff", brdcolor: "#ff00ff" }
+        this.Ball_CURRENT_SETTINGS = { bgcolor: "#fff", brdcolor: "#ff00ff" }
     }
 
     initialize() {
@@ -63,91 +44,44 @@ export class Game {
 
             var res = await fetch("./json/data.json");
             this.quotes = await res.json();
-            this.textures = TextureManager.loadTextures();
+            this.textures = await this.textureManager.loadTextures();
 
+            this.mapManager = new MapManager(this);
+            this.finishHandler();
             resolve();
-            /*
-                    this.player = new Player((this.metrics.width / 2) - (this.window_metrics.width * 0.15) / 2, this.metrics.height * 0.9, this.window_metrics.width * 0.15, this.window_metrics.height * 0.03, 5, null, null, this);
-                    this.balls.push(new Ball(1, (this.metrics.width / 2) - (this.window_metrics.width * 0.009) / 2, this.player.y - this.window_metrics.width * 0.009, this.window_metrics.width * 0.009, this.initialSettingsBall.bgcolor, this));
-                    this.balls.forEach(ball => ball.initialize());
-                    this.player.initialize();
-
-                    this.ballsColorPickersListeners();
-
-                    this.pause_element.addEventListener("click", (e) => this.pause(e));
-                    window.addEventListener("keyup", (e) => this.pause(e));
-
-                    this.settings_element.addEventListener("click", (e) => {
-                        this.settings_opened = !this.settings_opened;
-                        e.target.classList.toggle("settings_animation");
-                        this.menu_element.classList.toggle("menu_animation");
-                        Array.from(this.menu_element.children).forEach(x => x.style.display = this.settings_opened ? "block" : "none");
-                    });
-                    this.camera_element.addEventListener("click", () => {
-                        var link = document.createElement('a');
-                        link.setAttribute('download', 'canvas.png');
-                        link.setAttribute('href', this.canvasElement.toDataURL("image/png").replace("image/png", "image/octet-stream"));
-                        link.click();
-                    });
-
-                    this.user_element.addEventListener("click", () => this.showSettings());
- 
-                    this.save_settings.addEventListener("click", () => this.saveSettings());
-                    this.reset_settings.addEventListener("click", () => this.resetSettings());
-                    this.finishHandler();
-                    this.loader.remove();
-                   
-                });
-            });*/
         });
     }
 
     start() {
-        console.log("start");
         this.canvasElement = document.getElementById("canvas");
         this.ctx = this.canvasElement.getContext("2d");
         this.metrics = this.canvasElement.getBoundingClientRect();
         this.paintBackground("#000");
-
-        this.player = new Player((this.metrics.width / 2) - (this.window_metrics.width * 0.15) / 2, this.metrics.height * 0.9, this.window_metrics.width * 0.15, this.window_metrics.height * 0.03, 5, null, null, this);
-        this.balls.push(new Ball(1, (this.metrics.width / 2) - (this.window_metrics.width * 0.009) / 2, this.player.y - this.window_metrics.width * 0.009, this.window_metrics.width * 0.009, this.initialSettingsBall.bgcolor, this));
+        this.player = new Player((this.metrics.width / 2) - (this.window_metrics.width * 0.15) / 2, this.metrics.height * 0.9, this.window_metrics.width * 0.15, this.window_metrics.height * 0.03, 5, this);
+        this.balls = [];
+        this.balls.push(new Ball(1, (this.metrics.width / 2) - (this.window_metrics.width * 0.009) / 2, this.player.y - this.window_metrics.width * 0.009, this.window_metrics.width * 0.009, this));
         this.balls.forEach(ball => ball.initialize());
         this.player.initialize();
 
-        /* this.hideStartForm();
-         if (this.gamemode == Game.GAMEMODE.ARCADE) {
-             this.currentMap = this.mapManager.getRandomMap();
-             this.placeholder = false;
-             this.showPlaceholderStart();
-             this.showHud();
-             this.updateLives();
-             this.createMap();
-             this.loop = setInterval(() => this.update(), 10);
-         } else this.showMapSelection();*/
+        if (this.gamemode == Constants.gamemode().ARCADE) this.currentMap = this.mapManager.getRandomMap();
+        ScreenManager.showMenu_Hud();
+        this.updateLives();
+        this.createMap();
+        this.loop = setInterval(() => this.update(), 10);
+
     }
 
-    showMapSelection() {
-        document.getElementById("map_selector").style.display = "block";
-        Array.from(document.getElementById("map_selector").getElementsByClassName("preview_map")).forEach(map => {
-            let func = (e) => {
-                this.hideMapSelection();
-                this.currentMap = this.mapManager.getMap(e.target.id);
-                this.showPlaceholderStart();
-                this.showHud();
-                this.updateLives();
-                this.createMap();
-                this.loop = setInterval(() => this.update(), 10);
-                map.removeEventListener("click", func);
-            }
-            map.addEventListener("click", func, {
-                once: true
-            });
-        });
+    move() {
+        ScreenManager.hidePlaceholder();
+        this.player.start();
+        this.balls.forEach(ball => ball.start());
     }
 
-    hideMapSelection() {
-        document.getElementById("map_selector").style.display = "none";
+    pause() {
+        this.player.pause();
+        this.balls.forEach(ball => ball.pause());
     }
+
 
     finishHandler() {
         this.mapFinishedEvent.initEvent("map_finished", true, true);
@@ -159,30 +93,16 @@ export class Game {
     finish() {
         clearInterval(this.loop);
         this.clear();
-        this.resetGame();
-        this.start();
-    }
-
-    showHud() {
-        document.getElementById("hud").style.display = "block";
-    }
-
-    hideHud() {
-        document.getElementById("hud").style.display = "none";
+        ScreenManager.showGame();
+        if (this.gamemode == Constants.gamemode().SELECTION) ScreenManager.showMapSelection();
+        else setTimeout(() => this.start(), 50);
     }
 
     die() {
-        this.pause({
-            type: "click"
-        });
-        this.pause_element.style.background = "url('./img/form_icons/pause.png')";
-        this.pause_element.style.backgroundRepeat = "no-repeat";
-        this.pause_element.style.backgroundPosition = "center";
-        this.pause_element.style.backgroundSize = "cover";
-        this.placeholder = false;
-        this.showPlaceholderStart();
-        this.lives--;
-        if (this.lives <= 0) this.gameOver()
+        this.pause();
+        ScreenManager.showMenu_Hud();
+        this.lives = this.lives - 1;
+        if (this.lives <= 0) this.gameOver();
         else {
             this.updateLives();
             this.resetGame();
@@ -190,12 +110,8 @@ export class Game {
     }
 
     gameOver() {
-        this.gameover_wrapper.style.display = "block";
-        document.getElementsByClassName("game_over_quote")[0].innerHTML = "&#8220;" + this.quotes.random() + "&#8221";
+        ScreenManager.showGameOver();
         clearInterval(this.loop);
-        this.hideHud();
-        this.hidePlaceholderStart();
-        this.hideSettings();
         this.clear();
     }
 
@@ -205,9 +121,7 @@ export class Game {
             ball.x = (this.metrics.width / 2) - (this.window_metrics.width * 0.009) / 2;
             ball.y = this.player.y - this.window_metrics.width * 0.009;
         });
-        this.lives = 3;
-        this.player.pause();
-        this.balls.forEach(ball => ball.pause());
+        this.pause();
     }
 
     startEvent(name) {
@@ -243,61 +157,13 @@ export class Game {
     }
 
     updateLives() {
-        document.getElementById("lives").innerHTML = this.lives;
+        this.lives > 0 ? setTimeout(() => document.getElementById("lives").innerHTML = this.lives, 50) : this.lives;
     }
 
     resetSettings() {
-        this.player.bgColorPicker.reset();
-        this.player.brdColorPicker.reset()
-
-        this.bgColorPickerBall.reset();
-        this.brdColorPickerBall.reset();
-    }
-
-    saveSettings() {
-        this.hideSettings();
-    }
-
-
-
-    hideStartForm() {
-        this.showingStartForm = false;
-        $('#myModal').modal('hide');
-    }
-    showSettings() {
-        if (!this.paused)
-            this.pause({
-                type: "click"
-            });
-
-        document.getElementsByClassName("accountFormWrapper")[0].style.display = "block";
-        this.form_account.style.display = "block";
-    }
-
-    hideSettings() {
-        document.getElementsByClassName("accountFormWrapper")[0].style.display = "none";
-        this.form_account.style.display = "none";
-    }
-
-    showPlaceholderStart() {
-        this.placeholder_start = document.getElementById("placeholder_start");
-        document.getElementById("placeholder_start").style.display = "block";
-        window.addEventListener("keypress", (e) => {
-            if (e.keyCode == 32 && !this.placeholder) {
-                this.placeholder = true;
-                this.paused = false;
-                this.hidePlaceholderStart();
-                document.getElementById("pause").style.display = "block";
-                document.getElementById("menu").style.display = "block";
-                document.getElementById("settings").style.display = "block";
-                this.player.start();
-                this.balls.forEach(ball => ball.start());
-            };
-        });
-    }
-
-    hidePlaceholderStart() {
-        this.placeholder_start.style.display = "none";
+        this.player.reset();
+        this.balls.forEach(b => b.reset());
+        ScreenManager.showMenu_Hud();
     }
 
     createMap() {
@@ -326,39 +192,11 @@ export class Game {
         this.ctx.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
     }
 
-    pause(e) {
-        if ((e.type == "keyup" && e.key == "Escape") || e.type == "click") {
-            this.paused = !this.paused;
-            if (this.paused) {
-                this.player.pause();
-                this.balls.forEach(ball => ball.pause());
-                this.pause_element.style.background = "url('./img/form_icons/pause_filled.png')";
-            } else {
-                this.player.start();
-                this.balls.forEach(ball => ball.start());
-                this.pause_element.style.background = "url('./img/form_icons/pause.png')";
-            }
-            this.pause_element.style.backgroundRepeat = "no-repeat";
-            this.pause_element.style.backgroundPosition = "center";
-            this.pause_element.style.backgroundSize = "cover";
-        } else if (e.type == "keyup" && this.showingStartForm) {
-            var buttons = document.querySelector(".buttons");
-            var actual = document.querySelector("[selected]");
-            if (e.keyCode == 13) {
-                if (Array.from(buttons.children).indexOf(actual) == 0) this.start();
-                else if (Array.from(buttons.children).indexOf(actual) == 1) actual.innerHTML = `GAMEMODE: ${actual.innerHTML == "GAMEMODE: " + Game.GAMEMODE.ARCADE ? Game.GAMEMODE.SELECTION : Game.GAMEMODE.ARCADE}`;
-                else console.log("in production difficulty");
-            } else {
-
-            }
-        }
-    }
-
     ballsColorPickersListeners() {
 
         this.bgColorPickerBall = new iro.ColorPicker(".colorPicker3", {
             width: this.window_metrics.width * 0.05,
-            color: this.initialSettingsBall.bgcolor,
+            color: this.game.Ball_CURRENT_SETTINGS.bgcolor,
             borderWidth: 1,
             borderColor: "#fff",
             layoutDirection: "horizontal"
@@ -367,15 +205,14 @@ export class Game {
         this.bgColorPickerBall.on(["color:init", "color:change"], (color) => {
             this.balls.forEach(ball => {
                 ball.bgcolor = color.hexString;
-                ball.initSettings.bgcolor = color.hexString;
-
+                this.game.Ball_CURRENT_SETTINGS.bgcolor = color.hexString;
             });
 
         });
 
         this.brdColorPickerBall = new iro.ColorPicker(".colorPicker4", {
             width: this.window_metrics.width * 0.05,
-            color: this.initialSettingsBall.brdcolor,
+            color: this.game.Ball_CURRENT_SETTINGS.brdcolor,
             borderWidth: 1,
             borderColor: "#fff",
             layoutDirection: "horizontal"
@@ -384,8 +221,37 @@ export class Game {
         this.brdColorPickerBall.on(["color:init", "color:change"], (color) => {
             this.balls.forEach(ball => {
                 ball.brdcolor = color.hexString;
-                ball.initSettings.brdcolor = color.hexString;
+                this.game.Ball_CURRENT_SETTINGS.brdcolor = color.hexString;
             });
+        });
+    }
+
+    playerColorPickerListeners() {
+
+        this.bgColorPickerPlayer = new iro.ColorPicker(".colorPicker", {
+            width: this.window_metrics.width * 0.05,
+            color: this.player.bgcolor,
+            borderWidth: 1,
+            borderColor: "#fff",
+            layoutDirection: "horizontal"
+        });
+
+        this.bgColorPickerPlayer.on(["color:init", "color:change"], (color) => {
+            this.player.currentSettings.bgcolor = color.hexString;
+            this.player.bgcolor = color.hexString;
+        });
+
+        this.brdColorPickerPlayer = new iro.ColorPicker(".colorPicker2", {
+            width: this.window_metrics.width * 0.05,
+            color: this.player.brdcolor,
+            borderWidth: 1,
+            borderColor: "#fff",
+            layoutDirection: "horizontal"
+        });
+
+        this.brdColorPickerPlayer.on(["color:init", "color:change"], (color) => {
+            this.player.currentSettings.brdcolor = color.hexString;
+            this.player.brdcolor = color.hexString;
         });
     }
 

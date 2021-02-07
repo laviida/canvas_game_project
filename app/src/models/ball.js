@@ -1,5 +1,8 @@
-class Ball {
-    constructor(id, x, y, r, bgcolor, game) {
+import { PowerUp } from "./powers.js";
+
+export class Ball {
+
+    constructor(id, x, y, r, game) {
         this.id = id;
         this.x = x;
         this.y = y;
@@ -7,18 +10,15 @@ class Ball {
         this.vx = 0;
         this.vy = 0;
         this.v = 0;
-        this.bgcolor = bgcolor;
-        this.brdcolor = "#fff";
         this.game = game;
+        this.bgcolor = this.game.Ball_INIT_SETTINGS.bgcolor;
+        this.brdcolor = this.game.Ball_INIT_SETTINGS.brdcolor;
         this.lava_ball = false;
         this.lavaSettings = {
             bgcolor: "#cf6010",
             brdcolor: "#cf1020"
         }
-        this.initSettings = {
-            bgcolor: this.bgcolor,
-            brdcolor: this.brdcolor
-        }
+
     }
 
     initialize() {
@@ -46,7 +46,7 @@ class Ball {
             this.vy = this.vy == 1 ? -1 : 1;
             this.game.die();
         }
-        if (this.y <= 0) this.vy = this.vy == 1 ? -1 : 1;
+        if (this.y - this.r <= 0) this.vy = this.vy == 1 ? -1 : 1;
 
         // player collisions
         // V
@@ -118,13 +118,20 @@ class Ball {
     normal() {
         this.lava_ball = false;
         this.v = 3;
-        this.bgcolor = this.initSettings.bgcolor;
-        this.brdcolor = this.initSettings.brdcolor;
+        this.bgcolor = this.game.Ball_CURRENT_SETTINGS.bgcolor;
+        this.brdcolor = this.game.Ball_CURRENT_SETTINGS.brdcolor;
     }
 
     lava() {
         this.lava_ball = true;
         this.bgcolor = this.lavaSettings.bgcolor;
         this.brdcolor = this.lavaSettings.brdcolor;
+    }
+
+    reset() {
+        this.bgcolor = this.game.Ball_INIT_SETTINGS.bgcolor;
+        this.brdcolor = this.game.Ball_INIT_SETTINGS.brdcolor;
+        this.game.Ball_CURRENT_SETTINGS.bgcolor = this.game.Ball.INIT_SETTINGS.bgcolor;
+        this.game.Ball_CURRENT_SETTINGS.brdcolor = this.game.Ball.INIT_SETTINGS.brdcolor;
     }
 }

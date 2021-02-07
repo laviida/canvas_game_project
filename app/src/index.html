@@ -1,125 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+    />
+    <title>Document</title>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
-  <title>Document</title>
+    <!--BOOTSTRAP 4.6.0 -->
+    <script>
+      window.jQuery = window.$ = require("jquery");
+    </script>
+    <script src="../node_modules/jquery/dist/jquery.js"></script>
+    <script src="../node_modules/popper.js/dist/umd/popper.js"></script>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    <link type="text/css" rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css"></script>
 
-  <!--BOOTSTRAP 4.6.0 -->
-  <script>
-    window.jQuery = window.$ = require("jquery");
-  </script>
-  <script src="../node_modules/jquery/dist/jquery.js"></script>
-  <script src="../node_modules/popper.js/dist/umd/popper.js"></script>
-  <script src="../node_modules/bootstrap/dist/js/bootstrap.js"></script>
-  <script src="./libs/splitting/splitting.js"></script>
+    <!-- SPLITTING -->
+    <script src="./libs/splitting/splitting.js"></script>
+    <!-- COLOR PICKER -->
+    <script src="./libs/iro/iro.min.js"></script>
 
-  <!-- COLOR PICKER -->
-  <script src="./libs/iro/iro.min.js"></script>
+    <!-- CUSTOM -->
+    <script src="./main.js" type="module"></script>
+    <link rel="stylesheet" href="./css/index.css" />
 
-  <script src="brick.js"></script>
-  <script src="player.js"></script>
-  <script src="ball.js"></script>
-  <script src="map.js"></script>
-  <script src="powers.js"></script>
-  <script src="main.js" type="module"></script>
+    <!-- FONTS -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Press+Start+2P|Permanent+Marker"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=VT323"
+      rel="stylesheet"
+      type="text/css"
+    />
+  </head>
 
-  <link rel="stylesheet" href="./css/index.css" />
-  <link href="https://fonts.googleapis.com/css?family=Press+Start+2P|Permanent+Marker" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css?family=VT323" rel="stylesheet" type="text/css" />
-</head>
+  <body>
+    <div id="game"></div>
 
-<body>
-  <!-- <div id="pause" title="Play / Pause game"></div>
-    <div id="settings" title="Settings"></div>
-    <div id="menu">
-      <div id="camera" title="Take a picture of canvas" class="menu_item"></div>
-      <div id="user" title="User settings" class="menu_item"></div>
-    </div>
-  -->
+    <div id="forms"></div>
 
-  <div id="gameover_wrapper">
-    <div class="game_over_title">GAME OVER</div>
-    <div class="game_over_quote grey-with-red"></div>
-  </div>
-  <h2 id="placeholder_start" class="grey-with-red one-line">
-    press space to start
-  </h2>
-  <div id="hud">
-    <img src="./img/form_icons/heart.png" alt="heart icon" />
-    <span id="lives"></span>
-  </div>
-  <div class="accountFormWrapper">
-    <div id="form_account">
-      <div class="container">
-        <div class="row">
-          <div class="col purple-with-blue text-center underline one-line">
-            settings
-          </div>
-        </div>
-        <div class="row mb-3">
-          <div class="col purple-with-blue one-line align-self-center">
-            user background color
-          </div>
-          <div class="col pr-5">
-            <div class="colorPicker"></div>
-          </div>
-        </div>
-
-        <div class="row mb-3">
-          <div class="col purple-with-blue one-line align-self-center">
-            user border color
-          </div>
-          <div class="col pr-5">
-            <div class="colorPicker2"></div>
-          </div>
-        </div>
-
-        <div class="row mb-3">
-          <div class="col purple-with-blue one-line align-self-center">
-            ball background color
-          </div>
-          <div class="col pr-5">
-            <div class="colorPicker3"></div>
-          </div>
-        </div>
-
-        <div class="row mb-3">
-          <div class="col purple-with-blue one-line align-self-center">
-            ball border color
-          </div>
-          <div class="col pr-5">
-            <div class="colorPicker4"></div>
-          </div>
-        </div>
-        <div class="row mb-3">
-          <div class="col d-flex justify-content-end">
-            <button id="save_settings" class="grey-with-red one-line">
-              save
-            </button>
-          </div>
-          <div class="col d-flex justify-content-start">
-            <button id="reset_settings" class="grey-with-red one-line">
-              reset
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="map_selector">
-    <div class="maps">
-      <div class="preview_map" id="alien"></div>
-      <div class="preview_map" id="ball"></div>
-      <div class="preview_map" id="mario"></div>
-      <div class="preview_map" id="emoji"></div>
-      <div class="preview_map" id="space"></div>
-    </div>
-  </div>
-
-
-</body>
-
+  </body>
 </html>

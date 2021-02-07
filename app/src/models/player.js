@@ -1,9 +1,7 @@
-class Player {
-    constructor(x, y, w, h, r, bgcolor, brdcolor, game) {
-        this.initialSettings = {
-            bgcolor: "#fff",
-            brdcolor: "#ff00ff"
-        }
+export class Player {
+    constructor(x, y, w, h, r, game) {
+        this.initialSettings = { bgcolor: "#fff", brdcolor: "#ff00ff" }
+        this.currentSettings = { bgcolor: "#fff", brdcolor: "#ff00ff" }
         this.x = x;
         this.y = y;
         this.w = w;
@@ -12,19 +10,16 @@ class Player {
         this.r = r;
         this.vx = 0;
         this.v = 0;
-        this.bgcolor = null == bgcolor ? this.initialSettings.bgcolor : bgcolor;
-        this.brdcolor = null == brdcolor ? this.initialSettings.brdcolor : brdcolor;;
+        this.bgcolor = this.currentSettings.bgcolor;
+        this.brdcolor = this.currentSettings.brdcolor;
         this.game = game;
         this.moves = [false, false]; // left - right
-        this.bgColorPicker = null;
-        this.brdColorPicker = null;
         this._invisible = false;
     }
 
     initialize() {
         window.addEventListener("keydown", (e) => this.detectMove(e));
         window.addEventListener("keyup", (e) => this.removeMove(e));
-        this.settingsListeners();
     }
 
     draw() {
@@ -78,35 +73,6 @@ class Player {
     pause() {
         this.v = 0;
     }
-
-    settingsListeners() {
-
-        this.bgColorPicker = new iro.ColorPicker(".colorPicker", {
-            width: this.game.window_metrics.width * 0.05,
-            color: this.initialSettings.bgcolor,
-            borderWidth: 1,
-            borderColor: "#fff",
-            layoutDirection: "horizontal"
-        });
-
-        this.bgColorPicker.on(["color:init", "color:change"], (color) => {
-            this.initialSettings.bgcolor = color.hexString;
-            this.bgcolor = color.hexString;
-        });
-
-        this.brdColorPicker = new iro.ColorPicker(".colorPicker2", {
-            width: this.game.window_metrics.width * 0.05,
-            color: this.initialSettings.brdcolor,
-            borderWidth: 1,
-            borderColor: "#fff",
-            layoutDirection: "horizontal"
-        });
-
-        this.brdColorPicker.on(["color:init", "color:change"], (color) => {
-            this.initialSettings.brdcolor = color.hexString;
-            this.brdcolor = color.hexString;
-        });
-    }
     stretch() {
         this.w = this.w * 1.3;
     }
@@ -118,14 +84,21 @@ class Player {
     normal() {
         this.w = this.first_w;
         this._invisible = false;
-        this.bgcolor = this.initialSettings.bgcolor;
-        this.brdcolor = this.initialSettings.brdcolor;
+        this.bgcolor = this.currentSettings.bgcolor;
+        this.brdcolor = this.currentSettings.brdcolor;
     }
 
     invisible() {
         this._invisible = true;
         this.bgcolor = "#000";
         this.brdcolor = "#000";
+    }
+
+    reset() {
+        this.bgcolor = this.initialSettings.bgcolor;
+        this.brdcolor = this.initialSettings.brdcolor;
+        this.currentSettings.bgcolor = this.initialSettings.bgcolor;
+        this.currentSettings.brdcolor = this.initialSettings.brdcolor;
     }
 
 }

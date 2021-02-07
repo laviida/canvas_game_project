@@ -1,1 +1,1 @@
-electron-packager ./app supergame --platform=win32 --arch=x64
+electron-packager ./app supergame --platform=win32 --arch=x64 --overwrite

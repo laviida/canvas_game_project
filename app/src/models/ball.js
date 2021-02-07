@@ -131,7 +131,7 @@ export class Ball {
     reset() {
         this.bgcolor = this.game.Ball_INIT_SETTINGS.bgcolor;
         this.brdcolor = this.game.Ball_INIT_SETTINGS.brdcolor;
-        this.game.Ball_CURRENT_SETTINGS.bgcolor = this.game.Ball.INIT_SETTINGS.bgcolor;
-        this.game.Ball_CURRENT_SETTINGS.brdcolor = this.game.Ball.INIT_SETTINGS.brdcolor;
+        this.game.Ball_CURRENT_SETTINGS.bgcolor = this.game.Ball_INIT_SETTINGS.bgcolor;
+        this.game.Ball_CURRENT_SETTINGS.brdcolor = this.game.Ball_INIT_SETTINGS.brdcolor;
     }
 }

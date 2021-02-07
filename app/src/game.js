@@ -196,7 +196,7 @@ export class Game {
 
         this.bgColorPickerBall = new iro.ColorPicker(".colorPicker3", {
             width: this.window_metrics.width * 0.05,
-            color: this.game.Ball_CURRENT_SETTINGS.bgcolor,
+            color: this.Ball_CURRENT_SETTINGS.bgcolor,
             borderWidth: 1,
             borderColor: "#fff",
             layoutDirection: "horizontal"
@@ -205,14 +205,14 @@ export class Game {
         this.bgColorPickerBall.on(["color:init", "color:change"], (color) => {
             this.balls.forEach(ball => {
                 ball.bgcolor = color.hexString;
-                this.game.Ball_CURRENT_SETTINGS.bgcolor = color.hexString;
+                this.Ball_CURRENT_SETTINGS.bgcolor = color.hexString;
             });
 
         });
 
         this.brdColorPickerBall = new iro.ColorPicker(".colorPicker4", {
             width: this.window_metrics.width * 0.05,
-            color: this.game.Ball_CURRENT_SETTINGS.brdcolor,
+            color: this.Ball_CURRENT_SETTINGS.brdcolor,
             borderWidth: 1,
             borderColor: "#fff",
             layoutDirection: "horizontal"
@@ -221,7 +221,7 @@ export class Game {
         this.brdColorPickerBall.on(["color:init", "color:change"], (color) => {
             this.balls.forEach(ball => {
                 ball.brdcolor = color.hexString;
-                this.game.Ball_CURRENT_SETTINGS.brdcolor = color.hexString;
+                this.Ball_CURRENT_SETTINGS.brdcolor = color.hexString;
             });
         });
     }

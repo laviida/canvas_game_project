@@ -4,7 +4,10 @@
   "main": "index.js",
   "scripts": {
     "build": "babel src -d dist",
-    "start": "electron ."
+    "start": "electron .",
+    "package-mac": "electron-packager . supergame --overwrite --platform=darwin --arch=x64 --prune=true --out=../executables",
+    "package-win": "electron-packager . supergame --overwrite --asar=true --platform=win32 --arch=x64 --prune=true --out=../executables",
+    "package-linux": "electron-packager . supergame --overwrite --asar=true --platform=linux --arch=x64 --prune=true --out=../executables"
   },
   "keywords": [],
   "author": "",

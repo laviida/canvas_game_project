@@ -1,7 +1,8 @@
 import { ScreenManager } from "../managers/screen_manager.js";
+import { STATE } from "../constants/constants.js";
+
 export function _showMenuHud() {
     var game = window.game;
-    var pause = document.getElementById("pause");
     var settings = document.getElementById("settings");
     var menu = document.getElementById("menu");
     var camera = document.getElementById("camera");
@@ -11,11 +12,8 @@ export function _showMenuHud() {
         if (e.key == " ") game.move();
     }, { once: true });
 
-    window.addEventListener("keyup", (e) => {
-        if (e.key == "Escape") changePaused(pause);
-    });
+    window.addEventListener("keyup", (e) => { if (e.key == "Escape") game.state === STATE.RUNNING ? game.pause() : game.move() });
 
-    pause.addEventListener("click", (e) => changePaused(e.target));
 
     settings.addEventListener("click", (e) => {
         e.target.classList.toggle("settings_animation");
@@ -35,20 +33,6 @@ export function _showMenuHud() {
         ScreenManager.showSettings();
     });
     game.updateLives();
-}
-
-function changePaused(e) {
-    if (e.classList.contains("paused")) {
-        window.game.move();
-        e.style.background = "url('./img/form_icons/pause.png')";
-    } else {
-        window.game.pause();
-        e.style.background = "url('./img/form_icons/pause_filled.png')";
-    }
-    e.classList.toggle("paused");
-    e.style.backgroundRepeat = "no-repeat";
-    e.style.backgroundPosition = "center";
-    e.style.backgroundSize = "cover";
 }
 
 

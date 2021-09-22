@@ -1,6 +1,4 @@
-export function _showGame() {
-    createCanvas();
-}
+export function _showGame() { return createCanvas(); }
 
 function createCanvas() {
     let canvas = document.createElement("canvas");

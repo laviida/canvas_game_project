@@ -1,5 +1,5 @@
 import { TextureManager } from "./managers/textures.js";
-import { Constants } from "./utils/constants.js";
+import { GAMEMODE, DIFFICULTY, STATE } from "./constants/constants.js";
 import { Ball } from "./models/ball.js";
 import { Player } from "./models/player.js";
 import { ScreenManager } from "./managers/screen_manager.js";
@@ -23,14 +23,15 @@ export class Game {
         this.bgColorPickerPlayer = null;
         this.brdColorPickerPlayer = null;
         this.lives = 3;
-        this.gamemode = Constants.gamemode().ARCADE;
-        this.difficulty = Constants.difficulty()[0];
+        this.gamemode = GAMEMODE.ARCADE;
+        this.difficulty = DIFFICULTY.NOOB;
         this.mapFinishedEvent = new Event("map_finished");
         this.currentMap = null;
         this.loop = null;
         this.quotes = [];
         this.Ball_INIT_SETTINGS = { bgcolor: "#fff", brdcolor: "#ff00ff" }
         this.Ball_CURRENT_SETTINGS = { bgcolor: "#fff", brdcolor: "#ff00ff" }
+        this.state = STATE.RUNNING;
     }
 
     initialize() {
@@ -42,7 +43,7 @@ export class Game {
                 return (this - x1) * (y2 - x2) / (y1 - x1) + x2
             };
 
-            var res = await fetch("./json/data.json");
+            var res = await fetch("./assets/json/data.json");
             this.quotes = await res.json();
             this.textures = await this.textureManager.loadTextures();
 
@@ -63,7 +64,7 @@ export class Game {
         this.balls.forEach(ball => ball.initialize());
         this.player.initialize();
 
-        if (this.gamemode == Constants.gamemode().ARCADE) this.currentMap = this.mapManager.getRandomMap();
+        if (this.gamemode == GAMEMODE.ARCADE) this.currentMap = this.mapManager.getRandomMap();
         ScreenManager.showMenu_Hud();
         this.updateLives();
         this.createMap();
@@ -75,11 +76,13 @@ export class Game {
         ScreenManager.hidePlaceholder();
         this.player.start();
         this.balls.forEach(ball => ball.start());
+        this.state = STATE.RUNNING;
     }
 
     pause() {
         this.player.pause();
         this.balls.forEach(ball => ball.pause());
+        this.state = STATE.PAUSED;
     }
 
 
@@ -94,7 +97,7 @@ export class Game {
         clearInterval(this.loop);
         this.clear();
         ScreenManager.showGame();
-        if (this.gamemode == Constants.gamemode().SELECTION) ScreenManager.showMapSelection();
+        if (this.gamemode == GAMEMODE.SELECTION) ScreenManager.showMapSelection();
         else setTimeout(() => this.start(), 50);
     }
 

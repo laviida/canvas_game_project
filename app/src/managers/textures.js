@@ -116,25 +116,30 @@ export class TextureManager {
         return textures.find(tex => tex.id == id_texture);
     }
 
-    loadTextures() {
+    async loadTextures() {
         var promises = []
         for (let index = 1; index < 23; index++) {
             promises.push(new Promise(resolve => {
                 let texture = new Image();
-                texture.src = `./img/${index < 10 ? ("0" + index) : index}-Breakout-Tiles.png`;
+                texture.src = `./assets/img/${index < 10 ? ("0" + index) : index}-Breakout-Tiles.png`;
                 texture.id = `${index < 10 ? ("0" + index) : index}-Breakout-Tiles`;
                 texture.onload = () => resolve(texture);
             }))
         }
+        await sleep(2000);
 
         for (let index = 41; index < 51; index++) {
             promises.push(new Promise(resolve => {
                 let texture = new Image();
-                texture.src = `./powers/${index}-Breakout-Tiles.png`;
+                texture.src = `./assets/powers/${index}-Breakout-Tiles.png`;
                 texture.id = `${index}-Breakout-Tiles`;
                 texture.onload = () => resolve(texture);
             }))
         }
         return Promise.all(promises);
     }
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }

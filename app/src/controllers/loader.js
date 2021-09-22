@@ -1,3 +1,1 @@
-export function showLoader() {
-    $("#loader").show();
-}
+export function showLoader() { return $("#loader").show(); }

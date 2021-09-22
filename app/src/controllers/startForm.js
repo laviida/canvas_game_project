@@ -1,42 +1,27 @@
-import { Constants } from "../utils/constants.js";
+import { DIFFICULTY, GAMEMODE } from "../constants/constants.js";
 import { ScreenManager } from "../managers/screen_manager.js";
 
 export function startForm() {
     Splitting();
-    $("#myModal").modal({
-        backdrop: "none"
-    });
-
-    document.getElementById("gamemode").addEventListener("click", (e) => {
-        changeGamemode(e.target);
-        setSelected(e.target);
-    });
-
-    document.getElementById("difficulty").addEventListener("click", (e) => {
-        changeDifficulty(e.target);
-        setSelected(e.target);
-    });
-
+    $("#myModal").modal({ backdrop: "none" });
     window.addEventListener("keyup", keyupHandler);
-    document.getElementById("start_game").addEventListener("click", () => startGame(), { once: true });
 }
 
 function keyupHandler(e) {
     if (e.type == "keyup") {
-        var buttons = document.getElementsByClassName("buttons")[0];
-        var actual = buttons.getElementsByClassName("purple-with-blue")[0];
+        const buttons = document.getElementsByClassName("buttons")[0];
+        const actual = buttons.getElementsByClassName("purple-with-blue")[0];
         if (e.key == "ArrowUp") (setSelected(actual.previousElementSibling ? actual.previousElementSibling : buttons.lastElementChild));
         else if (e.key == "ArrowDown") (setSelected(actual.nextElementSibling ? actual.nextElementSibling : buttons.firstElementChild));
-        else if (e.key == "Enter") {
+        else if (e.key == "Enter" && actual.id == "start_game") startGame();
+        else if (e.key == "ArrowRight" || e.key == "ArrowLeft") {
+            const k = e.key == "ArrowRight" ? 1 : -1;
             switch (actual.id) {
                 case "gamemode":
                     changeGamemode(actual);
                     break;
                 case "difficulty":
-                    changeDifficulty(actual);
-                    break;
-                case "start_game":
-                    startGame();
+                    changeDifficulty(actual, k);
                     break;
                 default:
                     break;
@@ -47,7 +32,7 @@ function keyupHandler(e) {
 
 function startGame() {
     window.removeEventListener("keyup", keyupHandler);
-    if (window.game.gamemode == Constants.gamemode().SELECTION) ScreenManager.showMapSelection();
+    if (window.game.gamemode == GAMEMODE.SELECTION) ScreenManager.showMapSelection();
     else {
         ScreenManager.showGame();
         setTimeout(() => window.game.start(), 50);
@@ -55,21 +40,24 @@ function startGame() {
 }
 
 function changeGamemode(element) {
-    let _gamemode = element.dataset.gamemode == Constants.gamemode().ARCADE ? Constants.gamemode().SELECTION : Constants.gamemode().ARCADE;
+    const _gamemode = element.dataset.gamemode == GAMEMODE.ARCADE ? GAMEMODE.SELECTION : GAMEMODE.ARCADE;
     window.game.gamemode = _gamemode;
     element.dataset.gamemode = _gamemode;
-    element.innerHTML = "GAMEMODE: " + _gamemode;
+    element.innerHTML = `GAMEMODE: ${_gamemode}`;
 }
 
-function changeDifficulty(element) {
-    let id_difficulty = (parseInt(element.dataset.difficulty) + 1) == Constants.difficulty().length ? 0 : parseInt(element.dataset.difficulty) + 1;
-    window.game.difficulty = Constants.difficulty()[id_difficulty];
-    element.dataset.difficulty = id_difficulty;
-    element.innerHTML = "DIFFICULTY: " + Constants.difficulty()[id_difficulty];
+function changeDifficulty(e, key) {
+    const newIndex = Object.values(DIFFICULTY).findIndex(d => d == e.dataset.difficulty) + key;
+    const arrayDifficulty = Object.values(DIFFICULTY);
+    const difficulty = newIndex >= arrayDifficulty.length ? arrayDifficulty[0] : newIndex <= 0 ? arrayDifficulty[arrayDifficulty.length - 1] : arrayDifficulty[newIndex];
+
+    window.game.difficulty = difficulty;
+    e.dataset.difficulty = difficulty;
+    e.innerHTML = `DIFFICULTY: ${difficulty}`;
 }
 
 
 function setSelected(actual) {
-    Array.from(document.querySelectorAll(".buttons a")).forEach(b => b.classList.remove("purple-with-blue"));
+    Array.from(document.querySelectorAll(".buttons span")).forEach(b => b.classList.remove("purple-with-blue"));
     actual.classList.add("purple-with-blue");
 }
